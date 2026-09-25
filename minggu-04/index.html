@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mencari 3 Angka Terbesar</title>
+  </head>
+  <body>
+    <h2>Mencari 3 Angka Terbesar dari sebuah Array</h2>
+    <script>
+      const angka = [12, 45, 3, 10, 67, 90, 70, 25];
+
+      function cariTigaTerbesar(arr) {
+        const hasil = arr
+          .sort((a, b) => b - a)
+          .slice(0, 3);
+
+        return hasil;
+      }
+
+      const tigaTerbesar = cariTigaTerbesar(angka);
+      document.write("Array: [" + angka.join(", ") + "]<br>");
+      document.write("3 angka terbesar: [" + tigaTerbesar.join(", ") + "]");
+    </script>
+  </body>
+</html>
