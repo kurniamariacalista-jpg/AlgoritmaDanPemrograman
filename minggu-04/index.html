@@ -1,26 +1,214 @@
+
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mencari 3 Angka Terbesar</title>
-  </head>
-  <body>
-    <h2>Mencari 3 Angka Terbesar dari sebuah Array</h2>
-    <script>
-      const angka = [12, 45, 3, 10, 67, 90, 70, 25];
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peringkat Kelas</title>
 
-      function cariTigaTerbesar(arr) {
-        const hasil = arr
-          .sort((a, b) => b - a)
-          .slice(0, 3);
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 30px 15px;
+      color: #1e293b;
+    }
 
-        return hasil;
+    .container {
+      max-width: 750px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px #00000015;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #1d4ed8;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 11px;
+      font-size: 15px;
+      border-radius: 6px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 130px;
+      border: 1px solid #cbd5e1;
+    }
+
+    button {
+      border: none;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    th {
+      background: #dbeafe;
+    }
+
+    .hapus {
+      background: #dc2626;
+      padding: 7px 10px;
+    }
+
+    .top-three {
+      background: #fef3c7;
+      font-weight: bold;
+    }
+
+    .info {
+      text-align: center;
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Website Peringkat Kelas</h1>
+    <p class="info">Masukkan nama siswa dan nilai untuk melihat peringkat kelas.</p>
+
+    <form id="formSiswa">
+      <input
+        type="text"
+        id="nama"
+        placeholder="Nama siswa"
+        required
+      >
+
+      <input
+        type="number"
+        id="nilai"
+        placeholder="Nilai (0–100)"
+        min="0"
+        max="100"
+        required
+      >
+
+      <button type="submit">Tambah Siswa</button>
+    </form>
+
+    <h2>3 Nilai Tertinggi</h2>
+    <ol id="topTiga"></ol>
+
+    <h2>Daftar Peringkat Kelas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Peringkat</th>
+          <th>Nama</th>
+          <th>Nilai</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="daftarSiswa"></tbody>
+    </table>
+  </div>
+
+  <script>
+    let siswa = [
+      { nama: "Andi", nilai: 85 },
+      { nama: "Budi", nilai: 92 },
+      { nama: "Citra", nilai: 88 },
+      { nama: "Dina", nilai: 78 }
+    ];
+
+    const form = document.getElementById("formSiswa");
+    const inputNama = document.getElementById("nama");
+    const inputNilai = document.getElementById("nilai");
+    const daftarSiswa = document.getElementById("daftarSiswa");
+    const topTiga = document.getElementById("topTiga");
+
+    function tampilkanPeringkat() {
+      // Urutkan siswa berdasarkan nilai tertinggi
+      const urutan = [...siswa].sort((a, b) => b.nilai - a.nilai);
+
+      daftarSiswa.innerHTML = "";
+      topTiga.innerHTML = "";
+
+      // Tampilkan tiga siswa dengan nilai tertinggi
+      urutan.slice(0, 3).forEach((data, index) => {
+        const item = document.createElement("li");
+        item.textContent = `${data.nama} - ${data.nilai}`;
+        topTiga.appendChild(item);
+      });
+
+      // Tampilkan seluruh peringkat
+      urutan.forEach((data, index) => {
+        const baris = document.createElement("tr");
+
+        if (index < 3) {
+          baris.classList.add("top-three");
+        }
+
+        baris.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${data.nama}</td>
+          <td>${data.nilai}</td>
+          <td>
+            <button class="hapus" onclick="hapusSiswa(${siswa.indexOf(data)})">
+              Hapus
+            </button>
+          </td>
+        `;
+
+        daftarSiswa.appendChild(baris);
+      });
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nama = inputNama.value.trim();
+      const nilai = Number(inputNilai.value);
+
+      if (nama === "" || nilai < 0 || nilai > 100) {
+        alert("Masukkan nama dan nilai antara 0 sampai 100.");
+        return;
       }
 
-      const tigaTerbesar = cariTigaTerbesar(angka);
-      document.write("Array: [" + angka.join(", ") + "]<br>");
-      document.write("3 angka terbesar: [" + tigaTerbesar.join(", ") + "]");
-    </script>
-  </body>
+      siswa.push({ nama: nama, nilai: nilai });
+
+      form.reset();
+      tampilkanPeringkat();
+    });
+
+    function hapusSiswa(index) {
+      siswa.splice(index, 1);
+      tampilkanPeringkat();
+    }
+
+    tampilkanPeringkat();
+  </script>
+</body>
 </html>
+

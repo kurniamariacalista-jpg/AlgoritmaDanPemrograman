@@ -1,31 +1,367 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tugas Algoritma dan Pemrograman</title>
-</head>
-<body>
-  <h1>Tugas Algoritma dan Pemrograman</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peringkat Kelas</title>
+    <style>
+      :root {
+        --bg: #eef5ff;
+        --card: #ffffff;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #dbeafe;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --gold: #fbbf24;
+        --silver: #cbd5e1;
+        --bronze: #d97706;
+        --success: #10b981;
+      }
 
-  <p>Nama: <strong>Maria Kalista Kurnia</strong></p>
-  <p>NIM: <strong>31250007</strong></p>
+      * { box-sizing: border-box; }
 
-  <h2>Daftar Tugas</h2>
-  <ul>
-    <li><a href="./minggu-01/">Minggu 01</a></li>
-    <li><a href="./minggu-02/">Minggu 02</a></li>
-    <li><a href="./minggu-03/">Minggu 03</a></li>
-    <li><a href="./minggu-04/">Minggu 04</a></li>
-    <li><a href="./minggu-05/">Minggu 05</a></li>
-    <li><a href="./minggu-06/">Minggu 06</a></li>
-    <li><a href="./minggu-07/">Minggu 07</a></li>
-    <li><a href="./minggu-08/">Minggu 08</a></li>
-    <li><a href="./minggu-09/">Minggu 09</a></li>
-    <li><a href="./minggu-10/">Minggu 10</a></li>
-    <li><a href="./minggu-11/">Minggu 11</a></li>
-    <li><a href="./minggu-12/">Minggu 12</a></li>
-  </ul>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #eef4ff, #f7fbff);
+        color: var(--text);
+        padding: 40px 20px;
+      }
 
-</body>
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        color: var(--primary-dark);
+      }
+
+      .header p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .flowchart {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+
+      .step {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 18px 16px;
+        text-align: center;
+        border: 1px solid #dbeafe;
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.06);
+      }
+
+      .step .number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--secondary);
+        color: var(--primary-dark);
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .step strong {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        background: var(--card);
+        border-radius: 16px;
+        padding: 22px 18px;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+        border-top: 4px solid var(--primary);
+      }
+
+      .stat-card .label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-bottom: 10px;
+      }
+
+      .stat-card .value {
+        font-size: clamp(1.4rem, 2vw, 2rem);
+        font-weight: bold;
+        color: var(--text);
+      }
+
+      .panel {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .panel-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .badge {
+        background: #ecfdf5;
+        color: var(--success);
+        border: 1px solid #a7f3d0;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .ranking-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+        gap: 16px;
+      }
+
+      .ranking-card {
+        background: linear-gradient(180deg, #f8fbff, #eef6ff);
+        border-radius: 16px;
+        padding: 18px 14px;
+        text-align: center;
+        border: 1px solid #dbeafe;
+        position: relative;
+      }
+
+      .ranking-card:nth-child(1) { border-top: 6px solid var(--gold); }
+      .ranking-card:nth-child(2) { border-top: 6px solid var(--silver); }
+      .ranking-card:nth-child(3) { border-top: 6px solid var(--bronze); }
+
+      .medal {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #fff;
+        font-size: 0.8rem;
+      }
+
+      .ranking-card:nth-child(1) .medal { background: var(--gold); }
+      .ranking-card:nth-child(2) .medal { background: var(--silver); color: #334155; }
+      .ranking-card:nth-child(3) .medal { background: var(--bronze); }
+
+      .ranking-card h3 {
+        margin: 28px 0 10px;
+        font-size: 1.1rem;
+      }
+
+      .score {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-dark);
+      }
+
+      .small {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 26px;
+      }
+
+      th,
+      td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+
+      th {
+        background: #eff6ff;
+        color: var(--primary-dark);
+      }
+
+      tr:hover { background: #f8fbff; }
+
+      .rank-pill {
+        display: inline-block;
+        min-width: 36px;
+        text-align: center;
+        background: var(--secondary);
+        color: var(--primary-dark);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-weight: bold;
+      }
+
+      @media (max-width: 760px) {
+        .flowchart,
+        .stats,
+        .ranking-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .panel-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Peringkat Kelas</h1>
+        <p>Hasil ranking siswa berdasarkan nilai total</p>
+      </div>
+
+      <div class="flowchart">
+        <div class="step">
+          <div class="number">1</div>
+          <strong>Input Data</strong>
+        </div>
+        <div class="step">
+          <div class="number">2</div>
+          <strong>Bandingkan Nilai</strong>
+        </div>
+        <div class="step">
+          <div class="number">3</div>
+          <strong>Urutkan</strong>
+        </div>
+        <div class="step">
+          <div class="number">4</div>
+          <strong>Tampilkan Top 3</strong>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <span class="label">Total Siswa</span>
+          <span class="value" id="totalSiswa">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Nilai Tertinggi</span>
+          <span class="value" id="nilaiTertinggi">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Rata-rata Kelas</span>
+          <span class="value" id="nilaiRataRata">0</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Top 3 Siswa</h2>
+          <span class="badge">Ranking Terbaru</span>
+        </div>
+
+        <div class="ranking-grid" id="rankingTop"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Peringkat</th>
+              <th>Nama</th>
+              <th>Kelas</th>
+              <th>Nilai</th>
+            </tr>
+          </thead>
+          <tbody id="rankingTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const siswa = [
+        { nama: 'Adit', kelas: 'XII-A', nilai: [88, 90, 92, 95] },
+        { nama: 'Salsa', kelas: 'XII-A', nilai: [92, 93, 91, 94] },
+        { nama: 'Bima', kelas: 'XII-B', nilai: [84, 86, 88, 90] },
+        { nama: 'Citra', kelas: 'XII-B', nilai: [89, 91, 90, 92] },
+        { nama: 'Dimas', kelas: 'XII-C', nilai: [80, 85, 87, 88] }
+      ];
+
+      const dataRanking = siswa
+        .map((siswa) => {
+          const total = siswa.nilai.reduce((sum, nilai) => sum + nilai, 0);
+          const rataRata = total / siswa.nilai.length;
+          return { ...siswa, total, rataRata };
+        })
+        .sort((a, b) => b.total - a.total);
+
+      const totalSiswa = dataRanking.length;
+      const nilaiTertinggi = dataRanking[0]?.total ?? 0;
+      const rataRataKelas =
+        dataRanking.reduce((sum, item) => sum + item.total, 0) / totalSiswa;
+
+      document.getElementById('totalSiswa').textContent = totalSiswa;
+      document.getElementById('nilaiTertinggi').textContent = nilaiTertinggi;
+      document.getElementById('nilaiRataRata').textContent = rataRataKelas.toFixed(1);
+
+      const topThree = dataRanking.slice(0, 3);
+      const topContainer = document.getElementById('rankingTop');
+
+      topContainer.innerHTML = topThree
+        .map(
+          (item, index) => `
+            <div class="ranking-card">
+              <div class="medal">${index + 1}</div>
+              <h3>${item.nama}</h3>
+              <div class="score">${item.total}</div>
+              <div class="small">${item.kelas}</div>
+              <div class="small">Rata-rata: ${item.rataRata.toFixed(1)}</div>
+            </div>
+          `
+        )
+        .join('');
+
+      const tableBody = document.getElementById('rankingTable');
+      tableBody.innerHTML = dataRanking
+        .map(
+          (item, index) => `
+            <tr>
+              <td><span class="rank-pill">${index + 1}</span></td>
+              <td>${item.nama}</td>
+              <td>${item.kelas}</td>
+              <td>${item.total}</td>
+            </tr>
+          `
+        )
+        .join('');
+    </script>
+  </body>
 </html>

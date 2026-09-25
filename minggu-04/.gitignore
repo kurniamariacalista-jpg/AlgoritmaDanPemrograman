@@ -1,0 +1,36 @@
+[Mulai]
+   |
+   v
+[Masukkan array]
+   |
+   v
+[besar1 = -∞]
+[besar2 = -∞]
+[besar3 = -∞]
+   |
+   v
+[Ambil elemen array]
+   |
+   v
+Apakah elemen > besar1?
+   |--Ya--> [besar3 = besar2]
+            [besar2 = besar1]
+            [besar1 = elemen]
+   |
+   |--Tidak-->
+       Apakah elemen > besar2?
+          |--Ya--> [besar3 = besar2]
+                    [besar2 = elemen]
+          |--Tidak-->
+               Apakah elemen > besar3?
+                   |--Ya--> [besar3 = elemen]
+                   |--Tidak--> [Lanjut]
+   |
+   v
+Apakah semua elemen selesai?
+   |--Tidak--> [Kembali ke elemen berikutnya]
+   |--Ya--> [Tampilkan besar1, besar2, besar3]
+   |
+   v
+[Selesai]s
+
