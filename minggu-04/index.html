@@ -4,667 +4,923 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BloomRank - Peringkat Kelas</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>BlueClass | Ranking Kelas</title>
 
   <style>
+    :root {
+      --navy: #102a43;
+      --blue: #2474c6;
+      --sky: #e8f4ff;
+      --mint: #c8f7e5;
+      --white: #ffffff;
+      --text: #243b53;
+      --muted: #627d98;
+      --line: #d9e6f2;
+      --gold: #f5c451;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    :root {
-      --pink: #f45aa8;
-      --purple: #9653c8;
-      --dark-purple: #71379c;
-      --text: #443450;
-      --muted: #95879f;
-    }
-
     body {
-      min-height: 100vh;
-      padding: 30px 15px;
-      font-family: "Poppins", sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f3f8fc;
       color: var(--text);
-      background: linear-gradient(135deg, #ffd0e8, #e8d5ff 55%, #cfc5ff);
-      overflow-x: hidden;
-    }
-
-    /* Kartu utama */
-    .container {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 760px;
-      margin: auto;
-      padding: 30px;
-      border-radius: 32px;
-      background: #fffdfd;
-      box-shadow: 0 20px 60px #8b54a52b;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 24px;
+      background: linear-gradient(120deg, #102a43, #2474c6);
+      color: white;
+      padding: 28px 7%;
+      border-radius: 0 0 28px 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
     }
 
     .logo {
-      font-size: 44px;
-      margin-bottom: 2px;
-    }
-
-    h1 {
-      font-size: clamp(27px, 5vw, 42px);
-      line-height: 1.2;
+      font-size: 22px;
       font-weight: 800;
-      color: var(--purple);
-      letter-spacing: -1px;
+      letter-spacing: 1px;
     }
 
-    .subtitle {
-      margin-top: 8px;
-      color: #918697;
-      font-size: 16px;
+    .tag {
+      background: #ffffff22;
+      border: 1px solid #ffffff55;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 13px;
     }
 
-    /* Rentang nilai */
-    .score-range {
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 25px;
-      text-align: center;
-      background: linear-gradient(110deg, #fce3ef, #efe0ff);
+    header h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin-bottom: 10px;
     }
 
-    .score-range h2 {
-      color: var(--purple);
-      font-size: 20px;
-      margin-bottom: 13px;
+    header p {
+      max-width: 650px;
+      color: #d9ecff;
+      line-height: 1.7;
     }
 
-    .range-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+    main {
+      width: min(1100px, 90%);
+      margin: 28px auto 60px;
     }
 
-    .range-list span {
-      min-width: 55px;
-      padding: 10px 13px;
-      border-radius: 14px;
-      color: var(--purple);
-      background: white;
-      font-weight: 700;
-      box-shadow: 0 5px 12px #a875b315;
-    }
-
-    /* Form input */
-    .form-card {
-      padding: 22px;
-      border-radius: 25px;
-      background: #fff5fb;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--dark-purple);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    input {
-      width: 100%;
-      padding: 15px 17px;
-      margin-bottom: 16px;
-      border: 2px solid #ead8f5;
-      border-radius: 17px;
-      outline: none;
-      background: white;
-      color: var(--text);
-      font-size: 15px;
-      transition: 0.2s;
-    }
-
-    input:focus {
-      border-color: #c17de3;
-      box-shadow: 0 0 0 4px #f2e5fc;
-    }
-
-    input::placeholder {
-      color: #a99eaf;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 18px;
-      color: white;
-      background: linear-gradient(100deg, var(--pink), var(--purple));
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 9px 20px #c36ab52b;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px #c36ab544;
-    }
-
-    /* Statistik */
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 27px;
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
-    .stat {
-      padding: 15px 10px;
-      border-radius: 18px;
-      text-align: center;
-      background: #f7efff;
+    .stat-card,
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px #102a4308;
     }
 
-    .stat:nth-child(2) {
-      background: #fff0f7;
+    .stat-card span {
+      color: var(--muted);
+      font-size: 13px;
     }
 
-    .stat:nth-child(3) {
-      background: #fff7e8;
-    }
-
-    .stat .emoji {
-      font-size: 23px;
-    }
-
-    .stat p {
-      margin-top: 4px;
-      color: #95879f;
-      font-size: 11px;
-    }
-
-    .stat strong {
+    .stat-card strong {
       display: block;
-      margin-top: 3px;
-      color: var(--dark-purple);
+      font-size: 30px;
+      color: var(--navy);
+      margin-top: 8px;
+    }
+
+    .panel {
+      margin-bottom: 24px;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      color: var(--navy);
       font-size: 21px;
     }
 
-    /* Daftar juara */
-    .ranking-title {
-      margin-bottom: 15px;
-      color: var(--dark-purple);
-      font-size: 23px;
+    .subtext {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
     }
 
-    .ranking-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .rank-card {
+    .controls {
       display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px;
-      border-radius: 22px;
-      animation: appear 0.45s ease both;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
-    .rank-card:nth-child(1) {
-      background: linear-gradient(100deg, #fff0a8, #ffda70);
+    input,
+    button {
+      font: inherit;
+      border-radius: 12px;
+      padding: 11px 14px;
     }
 
-    .rank-card:nth-child(2) {
-      background: linear-gradient(100deg, #e3f5ff, #bde7f7);
+    input {
+      border: 1px solid var(--line);
+      background: #fbfdff;
+      color: var(--text);
+      min-width: 0;
+      flex: 1;
     }
 
-    .rank-card:nth-child(3) {
-      background: linear-gradient(100deg, #ffe1d3, #ffc5ad);
+    input:focus {
+      outline: 2px solid #9dccf5;
+      border-color: var(--blue);
     }
 
-    .rank-number {
-      display: grid;
-      place-items: center;
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
-      border-radius: 16px;
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(.97);
+    }
+
+    .btn-primary {
+      background: var(--blue);
       color: white;
-      background: var(--purple);
-      font-size: 20px;
+    }
+
+    .btn-light {
+      background: var(--sky);
+      color: var(--navy);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 460px;
+    }
+
+    th,
+    td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      background: #f2f8fd;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .rank {
+      display: inline-grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      background: var(--sky);
+      color: var(--blue);
+      border-radius: 10px;
       font-weight: 800;
     }
 
-    .rank-info {
-      flex: 1;
-      min-width: 0;
+    .rank.first {
+      background: #fff1c7;
+      color: #936500;
     }
 
-    .rank-info h3 {
-      overflow-wrap: anywhere;
-      color: #493452;
-      font-size: 16px;
+    .score {
+      font-weight: 800;
+      color: var(--navy);
     }
 
-    .rank-info p {
-      margin-top: 4px;
-      color: #776a80;
-      font-size: 13px;
+    .delete-btn {
+      background: #eef4f8;
+      color: #52677b;
+      padding: 7px 10px;
+      font-size: 12px;
     }
 
-    .rank-medal {
-      font-size: 31px;
-    }
-
-    .empty {
-      padding: 28px 15px;
-      border-radius: 20px;
-      color: #a092aa;
-      background: #f8efff;
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.8;
-    }
-
-    .all-title {
-      margin: 28px 0 12px;
-      color: var(--dark-purple);
-      font-size: 19px;
-    }
-
-    .student-list {
+    .podium {
       display: grid;
-      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
 
-    .student-row {
+    .podium-card {
+      text-align: center;
+      padding: 20px 12px;
+      background: #f4f9ff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .podium-card:first-child {
+      background: #fff9e8;
+      border-color: #f2d98c;
+    }
+
+    .medal {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .podium-card h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .podium-card p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .podium-card strong {
+      display: block;
+      color: var(--navy);
+      font-size: 24px;
+      margin-top: 8px;
+    }
+
+    /* Apresiasi juara */
+    .award-message {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(120deg, #e8f4ff, #c8f7e5);
+      border: 1px solid #9dccf5;
+      border-radius: 18px;
+      color: var(--navy);
+    }
+
+    .award-message.show {
+      display: block;
+      animation: popIn .5s ease both;
+    }
+
+    .award-message h3 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .award-message p {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .award-stars {
+      font-size: 30px;
+      margin-bottom: 8px;
+      animation: sparkle .8s ease-in-out infinite alternate;
+    }
+
+    .award-winner {
+      margin-top: 10px;
+      font-weight: 700;
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .confetti {
+      position: absolute;
+      top: -30px;
+      animation: fall 2.8s ease-in forwards;
+    }
+
+    /* Flowchart */
+    .flowchart-section {
+      background: var(--navy);
+      color: white;
+      border-radius: 22px;
+      padding: 26px;
+      overflow: hidden;
+    }
+
+    .flowchart-heading {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
-      padding: 13px 15px;
-      border: 1px solid #f0e5f4;
-      border-radius: 14px;
-      background: white;
-      font-size: 13px;
+      margin-bottom: 22px;
     }
 
-    .student-row strong {
-      color: var(--purple);
+    .flowchart-heading h2 {
+      color: white;
     }
 
-    .algorithm {
-      margin-top: 25px;
-      padding: 18px;
-      border: 1px dashed #d9b9ed;
-      border-radius: 20px;
-      background: #fcf8ff;
-    }
-
-    .algorithm h3 {
-      margin-bottom: 8px;
-      color: var(--dark-purple);
-      font-size: 16px;
-    }
-
-    .algorithm p {
-      color: #897b92;
+    .flowchart-tag {
+      background: var(--mint);
+      color: #145b4b;
+      padding: 7px 12px;
+      border-radius: 30px;
       font-size: 12px;
-      line-height: 1.8;
+      font-weight: 800;
+    }
+
+    .flowchart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .flow-node {
+      width: min(100%, 360px);
+      padding: 13px 18px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 700;
+      color: var(--navy);
+      background: var(--sky);
+      border: 2px solid #9dccf5;
+      border-radius: 12px;
+    }
+
+    .flow-start {
+      width: 190px;
+      border-radius: 40px;
+      background: var(--mint);
+      border-color: #79d8b5;
+    }
+
+    .flow-output {
+      background: #fff1c7;
+      border-color: var(--gold);
+    }
+
+    .flow-decision {
+      width: 250px;
+      background: #d9f8ef;
+      border-color: #79d8b5;
+      border-radius: 50px;
+    }
+
+    .flow-arrow {
+      color: #b9dfff;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .branch-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .branch-card {
+      width: min(100%, 260px);
+      border: 1px solid #ffffff2c;
+      background: #193d5c;
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .branch-label {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .branch-yes {
+      color: #064e3b;
+      background: #a7f3d0;
+    }
+
+    .branch-no {
+      color: #78350f;
+      background: #fde68a;
+    }
+
+    .branch-card p {
+      color: #e1effa;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .flow-note {
+      max-width: 650px;
+      text-align: center;
+      color: #c5d9eb;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 14px;
     }
 
     footer {
-      margin-top: 25px;
-      color: #aa9bb2;
-      font-size: 11px;
       text-align: center;
+      padding: 22px;
+      color: var(--muted);
+      font-size: 12px;
     }
 
-    /* Animasi bunga jatuh */
-    .flower {
-      position: fixed;
-      top: -50px;
-      z-index: 5;
-      pointer-events: none;
-      user-select: none;
-      animation: fall linear forwards;
-      filter: drop-shadow(0 3px 2px #8e5a9a25);
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-10vh) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.95;
-      }
-      90% {
-        opacity: 0.9;
-      }
-      100% {
-        transform: translateY(115vh) rotate(650deg);
-        opacity: 0;
-      }
-    }
-
-    @keyframes appear {
+    @keyframes popIn {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: scale(.7) translateY(15px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1) translateY(0);
       }
     }
 
-    @media (max-width: 560px) {
-      body {
-        padding: 15px 10px;
-      }
+    @keyframes sparkle {
+      from { transform: scale(.9) rotate(-8deg); }
+      to { transform: scale(1.1) rotate(8deg); }
+    }
 
-      .container {
-        padding: 22px 16px;
-        border-radius: 25px;
-      }
-
-      .form-card {
-        padding: 17px;
-      }
-
-      .stats {
-        gap: 7px;
-      }
-
-      .stat {
-        padding: 12px 5px;
-      }
-
-      .stat strong {
-        font-size: 18px;
-      }
-
-      .rank-card {
-        padding: 13px;
-      }
-
-      .rank-medal {
-        font-size: 25px;
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(540deg);
+        opacity: 0;
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .flower {
-        display: none;
+    @media (max-width: 650px) {
+      .stats,
+      .podium {
+        grid-template-columns: 1fr;
       }
 
-      * {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
+      header {
+        padding: 24px 5%;
+      }
+
+      main {
+        width: 92%;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .flowchart-section {
+        padding: 18px 12px;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
-    <header>
-      <div class="logo">🏆</div>
-      <h1>BloomRank</h1>
-      <p class="subtitle">Peringkat kelas penuh prestasi</p>
-    </header>
+  <header>
+    <div class="topbar">
+      <div class="logo">BLUECLASS</div>
+      <div class="tag">CLASS RANKING SYSTEM</div>
+    </div>
 
-    <section class="score-range">
-      <h2>📊 Rentang Nilai</h2>
-      <div class="range-list">
-        <span>70</span>
-        <span>75</span>
-        <span>80</span>
-        <span>85</span>
-        <span>90</span>
-        <span>95</span>
-        <span>100</span>
+    <h1>Belajar, Bertumbuh, Berprestasi.</h1>
+    <p>
+      Website sederhana untuk melihat peringkat nilai siswa.
+      Masukkan nama dan nilai, lalu lihat ranking kelas secara otomatis.
+    </p>
+  </header>
+
+  <main>
+    <section class="stats">
+      <div class="stat-card">
+        <span>Jumlah Siswa</span>
+        <strong id="totalStudents">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Rata-rata Nilai</span>
+        <strong id="averageScore">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Nilai Tertinggi</span>
+        <strong id="highestScore">0</strong>
       </div>
     </section>
 
-    <form class="form-card" id="studentForm">
-      <label for="studentName">NAMA SISWA</label>
-      <input
-        type="text"
-        id="studentName"
-        placeholder="Contoh: Kalista"
-        maxlength="40"
-        required
-      >
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>🏆 Tiga Peringkat Teratas</h2>
+          <p class="subtext">Diperbarui otomatis berdasarkan nilai.</p>
+        </div>
+      </div>
 
-      <label for="studentScore">NILAI UJIAN</label>
-      <input
-        type="number"
-        id="studentScore"
-        placeholder="Masukkan nilai 70 - 100"
-        min="70"
-        max="100"
-        required
-      >
-
-      <button class="submit-btn" type="submit">
-        ✨ Simpan & Proses Peringkat
-      </button>
-    </form>
-
-    <section class="stats">
-      <article class="stat">
-        <div class="emoji">👩🏻‍🎓</div>
-        <p>Jumlah Siswa</p>
-        <strong id="totalStudents">0</strong>
-      </article>
-
-      <article class="stat">
-        <div class="emoji">🌷</div>
-        <p>Rata-rata</p>
-        <strong id="averageScore">0</strong>
-      </article>
-
-      <article class="stat">
-        <div class="emoji">⭐</div>
-        <p>Nilai Tertinggi</p>
-        <strong id="highestScore">0</strong>
-      </article>
+      <div class="podium" id="podium"></div>
+      <div id="awardMessage" class="award-message" aria-live="polite"></div>
+      <div id="confettiLayer" class="confetti-layer"></div>
     </section>
 
-    <section>
-      <h2 class="ranking-title">🌟 Juara Teratas</h2>
-      <div class="ranking-list" id="rankingList"></div>
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Daftar Ranking Kelas</h2>
+          <p class="subtext">Tambah siswa, cari nama, atau hapus data.</p>
+        </div>
+      </div>
+
+      <form class="controls" id="studentForm">
+        <input id="studentName" placeholder="Nama siswa" required>
+        <input
+          id="studentScore"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="Nilai 0–100"
+          required
+        >
+        <button class="btn-primary" type="submit">+ Tambah</button>
+      </form>
+
+      <div class="controls">
+        <input id="searchInput" placeholder="Cari nama siswa...">
+        <button class="btn-light" id="resetButton" type="button">
+          Reset Contoh
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Nama Siswa</th>
+              <th>Nilai</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="rankingBody"></tbody>
+        </table>
+      </div>
     </section>
 
-    <section>
-      <h2 class="all-title">🌸 Semua Siswa</h2>
-      <div class="student-list" id="studentList"></div>
-    </section>
+    <section class="flowchart-section">
+      <div class="flowchart-heading">
+        <div>
+          <h2>Alur Linear Search</h2>
+          <p class="subtext" style="color:#c5d9eb">
+            Memeriksa nilai siswa satu per satu untuk mencari tiga nilai terbesar.
+          </p>
+        </div>
+        <span class="flowchart-tag">TOP 3 SEARCH</span>
+      </div>
 
-    <section class="algorithm">
-      <h3>🔎 Algoritma Linear Search</h3>
-      <p>
-        Program memeriksa nilai siswa satu per satu. Nilai setiap siswa
-        dibandingkan dengan peringkat pertama, kedua, dan ketiga.
-        Jika ditemukan nilai yang lebih tinggi, posisi peringkat
-        diperbarui. Setelah semua data diperiksa, tiga nilai tertinggi
-        ditampilkan.
-      </p>
-    </section>
+      <div class="flowchart">
+        <div class="flow-node flow-start">MULAI</div>
+        <div class="flow-arrow">↓</div>
 
-    <footer>
-      Made with 🌸 and hard work · BloomRank
-    </footer>
+        <div class="flow-node">
+          Siapkan array nilai siswa<br>
+          top1 = top2 = top3 = kosong
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node">
+          Ambil satu nilai dari array
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node flow-decision">
+          Apakah nilai lebih besar dari top1?
+        </div>
+
+        <div class="branch-row">
+          <div class="branch-card">
+            <span class="branch-label branch-yes">YA</span>
+            <p>
+              top3 = top2<br>
+              top2 = top1<br>
+              top1 = nilai sekarang
+            </p>
+          </div>
+
+          <div class="branch-card">
+            <span class="branch-label branch-no">TIDAK</span>
+            <p>
+              Periksa apakah nilai lebih besar dari top2.
+              Jika ya, geser top2 ke top3 dan simpan nilai di top2.
+              Jika tidak, periksa top3.
+            </p>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node flow-decision">
+          Apakah masih ada data?
+        </div>
+
+        <div class="branch-row">
+          <div class="branch-card">
+            <span class="branch-label branch-yes">YA</span>
+            <p>Kembali mengambil nilai berikutnya dan ulangi pemeriksaan.</p>
+          </div>
+
+          <div class="branch-card">
+            <span class="branch-label branch-no">TIDAK</span>
+            <p>Berhenti memeriksa data.</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node flow-output">
+          Tampilkan top1, top2, dan top3<br>
+          sebagai tiga nilai terbesar
+        </div>
+
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node flow-start">SELESAI</div>
+
+        <p class="flow-note">
+          Setiap nilai diperiksa satu per satu. Jika nilai masuk tiga terbesar,
+          posisi nilai tertinggi diperbarui. Proses berakhir setelah semua
+          data diperiksa.
+        </p>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    BLUECLASS • Website Ranking Kelas • Nilai awal hanya contoh
+  </footer>
+
   <script>
-    // Data awal siswa.
-    const students = [
+    const sampleStudents = [
       { id: 1, name: "Kalista", score: 95 },
-      { id: 2, name: "Astiyane", score: 90 },
-      { id: 3, name: "Farel", score: 88 },
-      { id: 4, name: "Caca", score: 85 }
+      { id: 2, name: "Asti", score: 88 },
+      { id: 3, name: "Yane", score: 92 },
+      { id: 4, name: "Caca", score: 79 },
+      { id: 5, name: "Farel", score: 98 },
+      { id: 6, name: "Adit", score: 85 },
+      { id: 7, name: "Nova", score: 90 },
+      { id: 8, name: "Claudia", score: 87 }
     ];
 
-    // Linear Search untuk mencari tiga nilai tertinggi.
-    function linearSearchTop3(arr) {
+    let students = sampleStudents.map(student => ({ ...student }));
+    let nextId = 9;
+    let previousTopThree = "";
+
+    // Linear search: mencari tiga nilai terbesar.
+    function topThree(data) {
       let top1 = null;
       let top2 = null;
       let top3 = null;
 
-      for (let i = 0; i < arr.length; i++) {
-        const current = arr[i];
-
-        if (top1 === null || current.score > top1.score) {
+      for (const student of data) {
+        if (top1 === null || student.score > top1.score) {
           top3 = top2;
           top2 = top1;
-          top1 = current;
-        } else if (top2 === null || current.score > top2.score) {
+          top1 = student;
+        } else if (top2 === null || student.score > top2.score) {
           top3 = top2;
-          top2 = current;
-        } else if (top3 === null || current.score > top3.score) {
-          top3 = current;
+          top2 = student;
+        } else if (top3 === null || student.score > top3.score) {
+          top3 = student;
         }
       }
 
       return [top1, top2, top3].filter(Boolean);
     }
 
-    // Menampilkan data ke halaman.
-    function renderPage() {
-      const topThree = linearSearchTop3(students);
+    function escapeHTML(text) {
+      return String(text).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
 
-      const total = students.length;
-      const sum = students.reduce((acc, student) => acc + student.score, 0);
-      const average = total ? (sum / total).toFixed(1) : 0;
-      const highest = total ? Math.max(...students.map(s => s.score)) : 0;
+    function render() {
+      const sorted = [...students].sort((a, b) => b.score - a.score);
+      const search = document.getElementById("searchInput")
+        .value.trim().toLowerCase();
 
-      document.getElementById("totalStudents").textContent = total;
-      document.getElementById("averageScore").textContent = average;
-      document.getElementById("highestScore").textContent = highest;
+      const filtered = sorted.filter(student =>
+        student.name.toLowerCase().includes(search)
+      );
+
+      document.getElementById("totalStudents").textContent = students.length;
+
+      const average = students.length
+        ? students.reduce((sum, student) => sum + student.score, 0) / students.length
+        : 0;
+
+      document.getElementById("averageScore").textContent = average.toFixed(1);
+
+      document.getElementById("highestScore").textContent =
+        students.length ? Math.max(...students.map(s => s.score)) : 0;
+
+      const top = topThree(students);
+      const medals = ["🥇", "🥈", "🥉"];
+
+      document.getElementById("podium").innerHTML = top.length
+        ? top.map((student, index) => `
+            <div class="podium-card">
+              <div class="medal">${medals[index]}</div>
+              <h3>${escapeHTML(student.name)}</h3>
+              <p>Peringkat ${index + 1}</p>
+              <strong>${student.score}</strong>
+            </div>
+          `).join("")
+        : "<p>Belum ada data siswa.</p>";
+
+      const tbody = document.getElementById("rankingBody");
+
+      tbody.innerHTML = filtered.map(student => {
+        const rank = sorted.findIndex(item => item.id === student.id) + 1;
+
+        return `
+          <tr>
+            <td>
+              <span class="rank ${rank === 1 ? "first" : ""}">${rank}</span>
+            </td>
+            <td>${escapeHTML(student.name)}</td>
+            <td class="score">${student.score}</td>
+            <td>
+              <button class="delete-btn" onclick="deleteStudent(${student.id})">
+                Hapus
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="4">Siswa tidak ditemukan.</td></tr>
+        `;
+      }
+
+      showAwards();
+    }
+
+    function showAwards() {
+      const top = topThree(students);
+      const awardBox = document.getElementById("awardMessage");
+
+      const currentTopThree = top
+        .map(student => `${student.id}:${student.score}`)
+        .join("|");
+
+      if (currentTopThree === previousTopThree) return;
+
+      const oldTopThree = previousTopThree;
+      previousTopThree = currentTopThree;
+
+      if (top.length === 0) {
+        awardBox.classList.remove("show");
+        awardBox.innerHTML = "";
+        return;
+      }
 
       const medals = ["🥇", "🥈", "🥉"];
-      const rankingList = document.getElementById("rankingList");
+      const titles = ["Juara 1", "Juara 2", "Juara 3"];
 
-      if (topThree.length === 0) {
-        rankingList.innerHTML = `
-          <div class="empty">
-            🌷 Belum ada data siswa.<br>
-            Masukkan nama dan nilai terlebih dahulu.
-          </div>
+      let message = `
+        <div class="award-stars">✨ ⭐ 🌟 ⭐ ✨</div>
+        <h3>🎉 Selamat kepada para juara! 🎉</h3>
+        <p>Terus semangat belajar dan pertahankan prestasimu!</p>
+      `;
+
+      top.forEach((student, index) => {
+        const wasAlreadyWinner = oldTopThree.includes(`${student.id}:`);
+
+        message += `
+          <p class="award-winner">
+            ${medals[index]} ${titles[index]}: ${escapeHTML(student.name)}
+            — Nilai ${student.score}
+          </p>
         `;
-      } else {
-        rankingList.innerHTML = topThree.map((student, index) => `
-          <article class="rank-card">
-            <div class="rank-number">${index + 1}</div>
-            <div class="rank-info">
-              <h3>${medals[index]} ${escapeHTML(student.name)}</h3>
-              <p>Nilai: <strong>${student.score}</strong></p>
-            </div>
-            <div class="rank-medal">${medals[index]}</div>
-          </article>
-        `).join("");
-      }
 
-      const studentList = document.getElementById("studentList");
-
-      if (total === 0) {
-        studentList.innerHTML = `<div class="empty">Belum ada data siswa.</div>`;
-      } else {
-        studentList.innerHTML = students.map((student, index) => `
-          <div class="student-row">
-            <span>${index + 1}. ${escapeHTML(student.name)}</span>
-            <strong>${student.score}</strong>
-          </div>
-        `).join("");
-      }
-    }
-
-    // Mencegah teks nama dibaca sebagai HTML.
-    function escapeHTML(text) {
-      return text.replace(/[&<>"']/g, function(character) {
-        const entities = {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
-        };
-        return entities[character];
+        if (!wasAlreadyWinner) {
+          message += `<p>🌟 Hebat! Selamat ${escapeHTML(student.name)}!</p>`;
+        }
       });
+
+      awardBox.innerHTML = message;
+      awardBox.classList.remove("show");
+      void awardBox.offsetWidth;
+      awardBox.classList.add("show");
+
+      launchConfetti();
     }
 
-    // Menambahkan data siswa melalui form.
-    document.getElementById("studentForm").addEventListener("submit", function(event) {
+    function launchConfetti() {
+      const layer = document.getElementById("confettiLayer");
+      const symbols = ["⭐", "✨", "🌟", "🎉", "💙", "🏆"];
+
+      layer.innerHTML = "";
+
+      for (let i = 0; i < 45; i++) {
+        const piece = document.createElement("span");
+        piece.className = "confetti";
+        piece.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.animationDelay = Math.random() * 0.8 + "s";
+        piece.style.fontSize = (16 + Math.random() * 16) + "px";
+        layer.appendChild(piece);
+      }
+
+      setTimeout(() => {
+        layer.innerHTML = "";
+      }, 3500);
+    }
+
+    document.getElementById("studentForm").addEventListener("submit", event => {
       event.preventDefault();
 
       const nameInput = document.getElementById("studentName");
       const scoreInput = document.getElementById("studentScore");
-
       const name = nameInput.value.trim();
       const score = Number(scoreInput.value);
 
       if (!name) {
-        alert("Nama siswa harus diisi.");
+        alert("Nama siswa tidak boleh kosong.");
         return;
       }
 
-      if (!Number.isFinite(score) || score < 70 || score > 100) {
-        alert("Nilai harus berada di antara 70 sampai 100.");
+      if (scoreInput.value === "" || score < 0 || score > 100) {
+        alert("Nilai harus berada di antara 0 sampai 100.");
         return;
       }
 
       students.push({
-        id: students.length + 1,
-        name: name,
-        score: score
+        id: nextId++,
+        name,
+        score
       });
 
-      renderPage();
-      this.reset();
-      nameInput.focus();
+      nameInput.value = "";
+      scoreInput.value = "";
+      render();
     });
 
-    // Membuat bunga dan kelopak jatuh.
-    const flowerSymbols = ["🌸", "🌺", "🌷", "✿", "❀"];
+    document.getElementById("searchInput").addEventListener("input", render);
 
-    function createFallingFlower() {
-      const flower = document.createElement("span");
-      flower.className = "flower";
-      flower.textContent =
-        flowerSymbols[Math.floor(Math.random() * flowerSymbols.length)];
+    document.getElementById("resetButton").addEventListener("click", () => {
+      students = sampleStudents.map(student => ({ ...student }));
+      nextId = 9;
+      previousTopThree = "";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("awardMessage").classList.remove("show");
+      render();
+    });
 
-      const size = 16 + Math.random() * 22;
-      const duration = 6 + Math.random() * 7;
-
-      flower.style.left = Math.random() * 100 + "vw";
-      flower.style.fontSize = size + "px";
-      flower.style.animationDuration = duration + "s";
-      flower.style.opacity = 0.5 + Math.random() * 0.5;
-
-      document.body.appendChild(flower);
-
-      setTimeout(() => {
-        flower.remove();
-      }, duration * 1000);
+    function deleteStudent(id) {
+      students = students.filter(student => student.id !== id);
+      render();
     }
 
-    // Tampilkan data contoh saat halaman pertama kali dibuka.
-    renderPage();
-
-    // Bunga terus jatuh dengan jeda acak.
-    setInterval(createFallingFlower, 550);
+    render();
   </script>
 </body>
 </html>
