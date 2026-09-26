@@ -1,215 +1,670 @@
+
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3 Angka Terbesar dari Array</title>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloomRank - Peringkat Kelas</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --pink: #f45aa8;
+      --purple: #9653c8;
+      --dark-purple: #71379c;
+      --text: #443450;
+      --muted: #95879f;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 30px 15px;
+      font-family: "Poppins", sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #ffd0e8, #e8d5ff 55%, #cfc5ff);
+      overflow-x: hidden;
+    }
+
+    /* Kartu utama */
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 760px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 32px;
+      background: #fffdfd;
+      box-shadow: 0 20px 60px #8b54a52b;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      font-size: 44px;
+      margin-bottom: 2px;
+    }
+
+    h1 {
+      font-size: clamp(27px, 5vw, 42px);
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--purple);
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #918697;
+      font-size: 16px;
+    }
+
+    /* Rentang nilai */
+    .score-range {
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 25px;
+      text-align: center;
+      background: linear-gradient(110deg, #fce3ef, #efe0ff);
+    }
+
+    .score-range h2 {
+      color: var(--purple);
+      font-size: 20px;
+      margin-bottom: 13px;
+    }
+
+    .range-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .range-list span {
+      min-width: 55px;
+      padding: 10px 13px;
+      border-radius: 14px;
+      color: var(--purple);
+      background: white;
+      font-weight: 700;
+      box-shadow: 0 5px 12px #a875b315;
+    }
+
+    /* Form input */
+    .form-card {
+      padding: 22px;
+      border-radius: 25px;
+      background: #fff5fb;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--dark-purple);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 17px;
+      margin-bottom: 16px;
+      border: 2px solid #ead8f5;
+      border-radius: 17px;
+      outline: none;
+      background: white;
+      color: var(--text);
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #c17de3;
+      box-shadow: 0 0 0 4px #f2e5fc;
+    }
+
+    input::placeholder {
+      color: #a99eaf;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 18px;
+      color: white;
+      background: linear-gradient(100deg, var(--pink), var(--purple));
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 9px 20px #c36ab52b;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px #c36ab544;
+    }
+
+    /* Statistik */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 27px;
+    }
+
+    .stat {
+      padding: 15px 10px;
+      border-radius: 18px;
+      text-align: center;
+      background: #f7efff;
+    }
+
+    .stat:nth-child(2) {
+      background: #fff0f7;
+    }
+
+    .stat:nth-child(3) {
+      background: #fff7e8;
+    }
+
+    .stat .emoji {
+      font-size: 23px;
+    }
+
+    .stat p {
+      margin-top: 4px;
+      color: #95879f;
+      font-size: 11px;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--dark-purple);
+      font-size: 21px;
+    }
+
+    /* Daftar juara */
+    .ranking-title {
+      margin-bottom: 15px;
+      color: var(--dark-purple);
+      font-size: 23px;
+    }
+
+    .ranking-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .rank-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 22px;
+      animation: appear 0.45s ease both;
+    }
+
+    .rank-card:nth-child(1) {
+      background: linear-gradient(100deg, #fff0a8, #ffda70);
+    }
+
+    .rank-card:nth-child(2) {
+      background: linear-gradient(100deg, #e3f5ff, #bde7f7);
+    }
+
+    .rank-card:nth-child(3) {
+      background: linear-gradient(100deg, #ffe1d3, #ffc5ad);
+    }
+
+    .rank-number {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      color: white;
+      background: var(--purple);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .rank-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rank-info h3 {
+      overflow-wrap: anywhere;
+      color: #493452;
+      font-size: 16px;
+    }
+
+    .rank-info p {
+      margin-top: 4px;
+      color: #776a80;
+      font-size: 13px;
+    }
+
+    .rank-medal {
+      font-size: 31px;
+    }
+
+    .empty {
+      padding: 28px 15px;
+      border-radius: 20px;
+      color: #a092aa;
+      background: #f8efff;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .all-title {
+      margin: 28px 0 12px;
+      color: var(--dark-purple);
+      font-size: 19px;
+    }
+
+    .student-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .student-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 15px;
+      border: 1px solid #f0e5f4;
+      border-radius: 14px;
+      background: white;
+      font-size: 13px;
+    }
+
+    .student-row strong {
+      color: var(--purple);
+    }
+
+    .algorithm {
+      margin-top: 25px;
+      padding: 18px;
+      border: 1px dashed #d9b9ed;
+      border-radius: 20px;
+      background: #fcf8ff;
+    }
+
+    .algorithm h3 {
+      margin-bottom: 8px;
+      color: var(--dark-purple);
+      font-size: 16px;
+    }
+
+    .algorithm p {
+      color: #897b92;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    footer {
+      margin-top: 25px;
+      color: #aa9bb2;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    /* Animasi bunga jatuh */
+    .flower {
+      position: fixed;
+      top: -50px;
+      z-index: 5;
+      pointer-events: none;
+      user-select: none;
+      animation: fall linear forwards;
+      filter: drop-shadow(0 3px 2px #8e5a9a25);
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.95;
+      }
+      90% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(115vh) rotate(650deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 560px) {
       body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #f5f7ff, #eef4ff);
-        color: #1f2937;
+        padding: 15px 10px;
       }
 
       .container {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 24px;
+        padding: 22px 16px;
+        border-radius: 25px;
       }
 
-      .card {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        padding: 24px;
+      .form-card {
+        padding: 17px;
       }
 
-      h1 {
-        text-align: center;
-        color: #1d4ed8;
-        margin-bottom: 8px;
+      .stats {
+        gap: 7px;
       }
 
-      .subtitle {
-        text-align: center;
-        color: #475569;
-        margin-bottom: 24px;
+      .stat {
+        padding: 12px 5px;
       }
 
-      .flowchart {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 12px;
-        margin: 24px 0;
+      .stat strong {
+        font-size: 18px;
       }
 
-      .box {
-        background: #e0ecff;
-        border: 2px solid #93c5fd;
-        border-radius: 12px;
-        padding: 14px 12px;
-        text-align: center;
-        font-weight: bold;
-        color: #1e3a8a;
+      .rank-card {
+        padding: 13px;
       }
 
-      label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
+      .rank-medal {
+        font-size: 25px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flower {
+        display: none;
       }
 
-      textarea {
-        width: 100%;
-        min-height: 110px;
-        padding: 12px;
-        border: 1px solid #cbd5e1;
-        border-radius: 10px;
-        font-size: 16px;
-        resize: vertical;
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
       }
+    }
+  </style>
+</head>
 
-      .actions {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        margin-top: 16px;
-        flex-wrap: wrap;
-      }
+<body>
+  <main class="container">
+    <header>
+      <div class="logo">🏆</div>
+      <h1>BloomRank</h1>
+      <p class="subtitle">Peringkat kelas penuh prestasi</p>
+    </header>
 
-      button {
-        background: #2563eb;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 12px 20px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: bold;
-      }
-
-      button:hover {
-        background: #1d4ed8;
-      }
-
-      .reset-btn {
-        background: #e2e8f0;
-        color: #0f172a;
-      }
-
-      .reset-btn:hover {
-        background: #cbd5e1;
-      }
-
-      .hasil {
-        margin-top: 24px;
-        padding: 16px;
-        border-radius: 10px;
-        background: #f8fafc;
-        border: 1px solid #dbeafe;
-      }
-
-      .hasil p {
-        margin: 6px 0;
-        font-size: 16px;
-      }
-
-      .error {
-        color: #b91c1c;
-        font-weight: bold;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="card">
-        <h1>Mencari 3 Angka Terbesar dari Array</h1>
-        <p class="subtitle">Contoh implementasi logika algoritma dalam HTML + JavaScript</p>
-
-        <div class="flowchart">
-          <div class="box">Mulai</div>
-          <div class="box">Inisialisasi max1, max2, max3</div>
-          <div class="box">Bandingkan tiap elemen</div>
-          <div class="box">Update nilai terbesar</div>
-          <div class="box">Tampilkan 3 terbesar</div>
-          <div class="box">Selesai</div>
-        </div>
-
-        <label for="arrayInput">Masukkan angka array (pisahkan dengan koma, spasi, atau enter):</label>
-        <textarea id="arrayInput">12, 45, 7, 90, 32, 60, 18</textarea>
-
-        <div class="actions">
-          <button id="hitungBtn">Hitung 3 Terbesar</button>
-          <button id="resetBtn" class="reset-btn" type="button">Reset</button>
-        </div>
-
-        <div class="hasil" id="hasil">
-          <p>Hasil akan ditampilkan di sini.</p>
-        </div>
+    <section class="score-range">
+      <h2>📊 Rentang Nilai</h2>
+      <div class="range-list">
+        <span>70</span>
+        <span>75</span>
+        <span>80</span>
+        <span>85</span>
+        <span>90</span>
+        <span>95</span>
+        <span>100</span>
       </div>
-    </div>
+    </section>
 
-    <script>
-      const arrayInput = document.getElementById('arrayInput');
-      const hasil = document.getElementById('hasil');
+    <form class="form-card" id="studentForm">
+      <label for="studentName">NAMA SISWA</label>
+      <input
+        type="text"
+        id="studentName"
+        placeholder="Contoh: Kalista"
+        maxlength="40"
+        required
+      >
 
-      function parseArray(text) {
-        return text
-          .split(/[\s,\n]+/)
-          .map((value) => value.trim())
-          .filter((value) => value !== '')
-          .map(Number);
+      <label for="studentScore">NILAI UJIAN</label>
+      <input
+        type="number"
+        id="studentScore"
+        placeholder="Masukkan nilai 70 - 100"
+        min="70"
+        max="100"
+        required
+      >
+
+      <button class="submit-btn" type="submit">
+        ✨ Simpan & Proses Peringkat
+      </button>
+    </form>
+
+    <section class="stats">
+      <article class="stat">
+        <div class="emoji">👩🏻‍🎓</div>
+        <p>Jumlah Siswa</p>
+        <strong id="totalStudents">0</strong>
+      </article>
+
+      <article class="stat">
+        <div class="emoji">🌷</div>
+        <p>Rata-rata</p>
+        <strong id="averageScore">0</strong>
+      </article>
+
+      <article class="stat">
+        <div class="emoji">⭐</div>
+        <p>Nilai Tertinggi</p>
+        <strong id="highestScore">0</strong>
+      </article>
+    </section>
+
+    <section>
+      <h2 class="ranking-title">🌟 Juara Teratas</h2>
+      <div class="ranking-list" id="rankingList"></div>
+    </section>
+
+    <section>
+      <h2 class="all-title">🌸 Semua Siswa</h2>
+      <div class="student-list" id="studentList"></div>
+    </section>
+
+    <section class="algorithm">
+      <h3>🔎 Algoritma Linear Search</h3>
+      <p>
+        Program memeriksa nilai siswa satu per satu. Nilai setiap siswa
+        dibandingkan dengan peringkat pertama, kedua, dan ketiga.
+        Jika ditemukan nilai yang lebih tinggi, posisi peringkat
+        diperbarui. Setelah semua data diperiksa, tiga nilai tertinggi
+        ditampilkan.
+      </p>
+    </section>
+
+    <footer>
+      Made with 🌸 and hard work · BloomRank
+    </footer>
+  </main>
+
+  <script>
+    // Data awal siswa.
+    const students = [
+      { id: 1, name: "Kalista", score: 95 },
+      { id: 2, name: "Astiyane", score: 90 },
+      { id: 3, name: "Farel", score: 88 },
+      { id: 4, name: "Caca", score: 85 }
+    ];
+
+    // Linear Search untuk mencari tiga nilai tertinggi.
+    function linearSearchTop3(arr) {
+      let top1 = null;
+      let top2 = null;
+      let top3 = null;
+
+      for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+
+        if (top1 === null || current.score > top1.score) {
+          top3 = top2;
+          top2 = top1;
+          top1 = current;
+        } else if (top2 === null || current.score > top2.score) {
+          top3 = top2;
+          top2 = current;
+        } else if (top3 === null || current.score > top3.score) {
+          top3 = current;
+        }
       }
 
-      function cariTigaTerbesar(arr) {
-        let max1 = -Infinity;
-        let max2 = -Infinity;
-        let max3 = -Infinity;
+      return [top1, top2, top3].filter(Boolean);
+    }
 
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i] > max1) {
-            max3 = max2;
-            max2 = max1;
-            max1 = arr[i];
-          } else if (arr[i] > max2) {
-            max3 = max2;
-            max2 = arr[i];
-          } else if (arr[i] > max3) {
-            max3 = arr[i];
-          }
-        }
+    // Menampilkan data ke halaman.
+    function renderPage() {
+      const topThree = linearSearchTop3(students);
 
-        return { max1, max2, max3 };
-      }
+      const total = students.length;
+      const sum = students.reduce((acc, student) => acc + student.score, 0);
+      const average = total ? (sum / total).toFixed(1) : 0;
+      const highest = total ? Math.max(...students.map(s => s.score)) : 0;
 
-      document.getElementById('hitungBtn').addEventListener('click', function () {
-        const input = arrayInput.value;
-        const data = parseArray(input);
+      document.getElementById("totalStudents").textContent = total;
+      document.getElementById("averageScore").textContent = average;
+      document.getElementById("highestScore").textContent = highest;
 
-        if (data.length === 0 || data.some((nilai) => Number.isNaN(nilai))) {
-          hasil.innerHTML = '<p class="error">Input tidak valid. Masukkan angka yang benar, contoh: 12, 45, 7, 90</p>';
-          return;
-        }
+      const medals = ["🥇", "🥈", "🥉"];
+      const rankingList = document.getElementById("rankingList");
 
-        const result = cariTigaTerbesar(data);
-
-        hasil.innerHTML = `
-          <p><strong>Array:</strong> [${data.join(', ')}]</p>
-          <p><strong>Angka terbesar 1:</strong> ${result.max1}</p>
-          <p><strong>Angka terbesar 2:</strong> ${result.max2}</p>
-          <p><strong>Angka terbesar 3:</strong> ${result.max3}</p>
+      if (topThree.length === 0) {
+        rankingList.innerHTML = `
+          <div class="empty">
+            🌷 Belum ada data siswa.<br>
+            Masukkan nama dan nilai terlebih dahulu.
+          </div>
         `;
+      } else {
+        rankingList.innerHTML = topThree.map((student, index) => `
+          <article class="rank-card">
+            <div class="rank-number">${index + 1}</div>
+            <div class="rank-info">
+              <h3>${medals[index]} ${escapeHTML(student.name)}</h3>
+              <p>Nilai: <strong>${student.score}</strong></p>
+            </div>
+            <div class="rank-medal">${medals[index]}</div>
+          </article>
+        `).join("");
+      }
+
+      const studentList = document.getElementById("studentList");
+
+      if (total === 0) {
+        studentList.innerHTML = `<div class="empty">Belum ada data siswa.</div>`;
+      } else {
+        studentList.innerHTML = students.map((student, index) => `
+          <div class="student-row">
+            <span>${index + 1}. ${escapeHTML(student.name)}</span>
+            <strong>${student.score}</strong>
+          </div>
+        `).join("");
+      }
+    }
+
+    // Mencegah teks nama dibaca sebagai HTML.
+    function escapeHTML(text) {
+      return text.replace(/[&<>"']/g, function(character) {
+        const entities = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        };
+        return entities[character];
+      });
+    }
+
+    // Menambahkan data siswa melalui form.
+    document.getElementById("studentForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nameInput = document.getElementById("studentName");
+      const scoreInput = document.getElementById("studentScore");
+
+      const name = nameInput.value.trim();
+      const score = Number(scoreInput.value);
+
+      if (!name) {
+        alert("Nama siswa harus diisi.");
+        return;
+      }
+
+      if (!Number.isFinite(score) || score < 70 || score > 100) {
+        alert("Nilai harus berada di antara 70 sampai 100.");
+        return;
+      }
+
+      students.push({
+        id: students.length + 1,
+        name: name,
+        score: score
       });
 
-      document.getElementById('resetBtn').addEventListener('click', function () {
-        arrayInput.value = '12, 45, 7, 90, 32, 60, 18';
-        hasil.innerHTML = '<p>Hasil akan ditampilkan di sini.</p>';
-      });
-    </script>
-  </body>
+      renderPage();
+      this.reset();
+      nameInput.focus();
+    });
+
+    // Membuat bunga dan kelopak jatuh.
+    const flowerSymbols = ["🌸", "🌺", "🌷", "✿", "❀"];
+
+    function createFallingFlower() {
+      const flower = document.createElement("span");
+      flower.className = "flower";
+      flower.textContent =
+        flowerSymbols[Math.floor(Math.random() * flowerSymbols.length)];
+
+      const size = 16 + Math.random() * 22;
+      const duration = 6 + Math.random() * 7;
+
+      flower.style.left = Math.random() * 100 + "vw";
+      flower.style.fontSize = size + "px";
+      flower.style.animationDuration = duration + "s";
+      flower.style.opacity = 0.5 + Math.random() * 0.5;
+
+      document.body.appendChild(flower);
+
+      setTimeout(() => {
+        flower.remove();
+      }, duration * 1000);
+    }
+
+    // Tampilkan data contoh saat halaman pertama kali dibuka.
+    renderPage();
+
+    // Bunga terus jatuh dengan jeda acak.
+    setInterval(createFallingFlower, 550);
+  </script>
+</body>
 </html>
