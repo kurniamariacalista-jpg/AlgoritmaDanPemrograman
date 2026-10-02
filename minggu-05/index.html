@@ -3,347 +3,920 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perbandingan Linear Search dan Binary Search</title>
+
+    <title>Search Produk Supermarket</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        h1 {
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
             text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.25);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .search-box h2 {
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         input {
-            padding: 8px;
-            width: 200px;
+            width: 300px;
+            padding: 13px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #6366f1;
         }
 
         button {
-            padding: 9px 15px;
+            padding: 13px 25px;
+            border: none;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 15px;
-            margin-bottom: 30px;
+        button:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
         }
 
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
+        /* PRODUCT */
+
+        .product-result {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
             text-align: center;
         }
 
-        th {
-            background-color: #ddd;
+        .product-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
         }
 
-        .ditemukan {
-            color: green;
+        .product-result h2 {
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 22px;
             font-weight: bold;
         }
 
-        .tidak {
-            color: red;
+        .barcode-text {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .card.linear {
+            border-top: 6px solid #f59e0b;
+        }
+
+        .card.binary {
+            border-top: 6px solid #10b981;
+        }
+
+        .card-icon {
+            font-size: 35px;
+        }
+
+        .card h3 {
+            margin: 10px 0;
+        }
+
+        .number {
+            font-size: 42px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .linear .number {
+            color: #f59e0b;
+        }
+
+        .binary .number {
+            color: #10b981;
+        }
+
+        .card p {
+            color: #64748b;
+        }
+
+        /* SECTION */
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            margin-bottom: 18px;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #4f46e5;
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 11px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .found {
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .not-found {
+            color: #dc2626;
+        }
+
+        /* COMPARISON */
+
+        .comparison-table th {
+            background: #1e293b;
+        }
+
+        .comparison-table tr:last-child td {
+            font-weight: bold;
+        }
+
+        /* SAVING */
+
+        .saving {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 25px;
+            border-radius: 18px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+        }
+
+        .saving h2 {
+            margin-bottom: 10px;
+        }
+
+        .saving-number {
+            font-size: 38px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+            body {
+                padding: 15px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            input {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Perbandingan Linear Search dan Binary Search</h1>
+<div class="container">
 
-    <p>Masukkan barcode produk:</p>
+    <!-- HEADER -->
 
-    <input type="number" id="barcode" placeholder="Contoh: 1708">
-    <button onclick="cariProduk()">Cari Produk</button>
-
-    <div id="hasil"></div>
-
-
-    <script>
-
-        // =========================
-        // DATA PRODUK
-        // =========================
-
-        let daftarProduk = [
-            { barcode: 1008, produk: "Sabun Lifebuoy Total 10" },
-            { barcode: 1015, produk: "Shampo Pantene Anti Dandruff" },
-            { barcode: 1023, produk: "Sikat Gigi Pepsodent" },
-            { barcode: 1045, produk: "Pasta Gigi Pepsodent" },
-            { barcode: 1067, produk: "Sabun Lux Soft Touch" },
-            { barcode: 1089, produk: "Shampo Clear Men" },
-            { barcode: 1102, produk: "Deodorant Rexona" },
-            { barcode: 1124, produk: "Tisu Paseo" },
-            { barcode: 1148, produk: "Minyak Goreng Bimoli" },
-            { barcode: 1175, produk: "Beras Sania 5kg" },
-            { barcode: 1199, produk: "Gula Pasir Gulaku" },
-            { barcode: 1210, produk: "Tepung Terigu Segitiga Biru" },
-            { barcode: 1234, produk: "Mie Instan Indomie Goreng" },
-            { barcode: 1256, produk: "Mie Instan Sedaap Goreng" },
-            { barcode: 1278, produk: "Kecap Bango" },
-            { barcode: 1301, produk: "Saus Sambal ABC" },
-            { barcode: 1325, produk: "Teh Celup Sariwangi" },
-            { barcode: 1347, produk: "Kopi Kapal Api" },
-            { barcode: 1369, produk: "Susu UHT Ultra Milk" },
-            { barcode: 1392, produk: "Susu Dancow" },
-            { barcode: 1415, produk: "Susu Frisian Flag" },
-            { barcode: 1423, produk: "Biskuit Roma Kelapa" },
-            { barcode: 1445, produk: "Biskuit Oreo" },
-            { barcode: 1467, produk: "Wafer Tango" },
-            { barcode: 1489, produk: "Cokelat SilverQueen" },
-            { barcode: 1512, produk: "Permen Kopiko" },
-            { barcode: 1534, produk: "Keripik Kentang Chitato" },
-            { barcode: 1555, produk: "Snack Taro" },
-            { barcode: 1578, produk: "Sereal Energen" },
-            { barcode: 1601, produk: "Air Mineral Aqua" },
-            { barcode: 1623, produk: "Teh Botol Sosro" },
-            { barcode: 1645, produk: "Minuman Pocari Sweat" },
-            { barcode: 1666, produk: "Minuman Yakult" },
-            { barcode: 1687, produk: "Sarden ABC Tomat" },
-            { barcode: 1708, produk: "Kornet Sapi Pronas" },
-            { barcode: 1729, produk: "Bubur Bayi Sun Pisang" },
-            { barcode: 1751, produk: "Popok Bayi MamyPoko" },
-            { barcode: 1773, produk: "Pembalut Charm" },
-            { barcode: 1795, produk: "Cotton Buds Selection" },
-            { barcode: 1817, produk: "Tisu Basah Cussons" },
-            { barcode: 1839, produk: "Pembersih Lantai Wipol" },
-            { barcode: 1861, produk: "Sabun Cuci Rinso" },
-            { barcode: 1883, produk: "Pelembut Molto" },
-            { barcode: 1905, produk: "Pewangi Ruangan Stella" },
-            { barcode: 1927, produk: "Obat Nyamuk Baygon" },
-            { barcode: 1949, produk: "Pasta Gigi Close Up" },
-            { barcode: 1961, produk: "Sabun Dettol" },
-            { barcode: 1975, produk: "Shampo Sunsilk" },
-            { barcode: 1987, produk: "Kopi Sachet Good Day" },
-            { barcode: 1999, produk: "Kopi Sachet Nescafe Classic" }
-        ];
+    <div class="header">
+        <h1>🔎 Pencarian Produk Supermarket</h1>
+        <p>Perbandingan Linear Search dan Binary Search</p>
+    </div>
 
 
-        // =========================
-        // LINEAR SEARCH
-        // =========================
+    <!-- SEARCH -->
 
-        function linearSearch(data, target) {
+    <div class="search-box">
 
-            let langkah = [];
+        <h2>Masukkan Barcode Produk</h2>
 
-            for (let i = 0; i < data.length; i++) {
+        <div class="input-group">
 
-                let ditemukan = data[i].barcode === target;
+            <input
+                type="number"
+                id="barcode"
+                placeholder="Contoh: 1708"
+            >
 
-                langkah.push({
-                    step: i + 1,
-                    posisi: i + 1,
-                    barcode: data[i].barcode,
-                    hasil: ditemukan
-                });
+            <button onclick="cariProduk()">
+                🔍 Cari Produk
+            </button>
 
-                if (ditemukan) {
-                    return {
-                        produk: data[i],
-                        langkah: langkah
-                    };
-                }
+        </div>
+
+    </div>
+
+
+    <!-- HASIL PRODUK -->
+
+    <div id="hasilProduk"></div>
+
+
+    <!-- CARD HASIL -->
+
+    <div id="hasilCard"></div>
+
+
+    <!-- TABEL LINEAR -->
+
+    <div id="linearTable"></div>
+
+
+    <!-- TABEL BINARY -->
+
+    <div id="binaryTable"></div>
+
+
+    <!-- PERBANDINGAN -->
+
+    <div id="comparison"></div>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+        Praktikum Algoritma & Pemrograman
+    </footer>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // DATA PRODUK
+    // ==========================================
+
+    const daftarProduk = [
+
+        { barcode: 1008, produk: "Sabun Lifebuoy Total 10" },
+        { barcode: 1015, produk: "Shampo Pantene Anti Dandruff" },
+        { barcode: 1023, produk: "Sikat Gigi Pepsodent" },
+        { barcode: 1045, produk: "Pasta Gigi Pepsodent" },
+        { barcode: 1067, produk: "Sabun Lux Soft Touch" },
+        { barcode: 1089, produk: "Shampo Clear Men" },
+        { barcode: 1102, produk: "Deodorant Rexona" },
+        { barcode: 1124, produk: "Tisu Paseo" },
+        { barcode: 1148, produk: "Minyak Goreng Bimoli" },
+        { barcode: 1175, produk: "Beras Sania 5kg" },
+        { barcode: 1199, produk: "Gula Pasir Gulaku" },
+        { barcode: 1210, produk: "Tepung Terigu Segitiga Biru" },
+        { barcode: 1234, produk: "Mie Instan Indomie Goreng" },
+        { barcode: 1256, produk: "Mie Instan Sedaap Goreng" },
+        { barcode: 1278, produk: "Kecap Bango" },
+        { barcode: 1301, produk: "Saus Sambal ABC" },
+        { barcode: 1325, produk: "Teh Celup Sariwangi" },
+        { barcode: 1347, produk: "Kopi Kapal Api" },
+        { barcode: 1369, produk: "Susu UHT Ultra Milk" },
+        { barcode: 1392, produk: "Susu Dancow" },
+        { barcode: 1415, produk: "Susu Frisian Flag" },
+        { barcode: 1423, produk: "Biskuit Roma Kelapa" },
+        { barcode: 1445, produk: "Biskuit Oreo" },
+        { barcode: 1467, produk: "Wafer Tango" },
+        { barcode: 1489, produk: "Cokelat SilverQueen" },
+        { barcode: 1512, produk: "Permen Kopiko" },
+        { barcode: 1534, produk: "Keripik Kentang Chitato" },
+        { barcode: 1555, produk: "Snack Taro" },
+        { barcode: 1578, produk: "Sereal Energen" },
+        { barcode: 1601, produk: "Air Mineral Aqua" },
+        { barcode: 1623, produk: "Teh Botol Sosro" },
+        { barcode: 1645, produk: "Minuman Pocari Sweat" },
+        { barcode: 1666, produk: "Minuman Yakult" },
+        { barcode: 1687, produk: "Sarden ABC Tomat" },
+        { barcode: 1708, produk: "Kornet Sapi Pronas" },
+        { barcode: 1729, produk: "Bubur Bayi Sun Pisang" },
+        { barcode: 1751, produk: "Popok Bayi MamyPoko" },
+        { barcode: 1773, produk: "Pembalut Charm" },
+        { barcode: 1795, produk: "Cotton Buds Selection" },
+        { barcode: 1817, produk: "Tisu Basah Cussons" },
+        { barcode: 1839, produk: "Pembersih Lantai Wipol" },
+        { barcode: 1861, produk: "Sabun Cuci Rinso" },
+        { barcode: 1883, produk: "Pelembut Molto" },
+        { barcode: 1905, produk: "Pewangi Ruangan Stella" },
+        { barcode: 1927, produk: "Obat Nyamuk Baygon" },
+        { barcode: 1949, produk: "Pasta Gigi Close Up" },
+        { barcode: 1961, produk: "Sabun Dettol" },
+        { barcode: 1975, produk: "Shampo Sunsilk" },
+        { barcode: 1987, produk: "Kopi Sachet Good Day" },
+        { barcode: 1999, produk: "Kopi Sachet Nescafe Classic" }
+
+    ];
+
+
+    // ==========================================
+    // LINEAR SEARCH
+    // ==========================================
+
+    function linearSearch(data, target) {
+
+        let langkah = [];
+
+        for (let i = 0; i < data.length; i++) {
+
+            const cocok = data[i].barcode === target;
+
+            langkah.push({
+                step: i + 1,
+                posisi: i + 1,
+                barcode: data[i].barcode,
+                cocok: cocok
+            });
+
+            if (cocok) {
+
+                return {
+                    data: data[i],
+                    langkah: langkah
+                };
+
             }
 
-            return {
-                produk: null,
-                langkah: langkah
-            };
         }
 
+        return {
+            data: null,
+            langkah: langkah
+        };
+    }
 
-        // =========================
-        // BINARY SEARCH
-        // =========================
 
-        function binarySearch(data, target) {
+    // ==========================================
+    // BINARY SEARCH
+    // ==========================================
 
-            let kiri = 0;
-            let kanan = data.length - 1;
+    function binarySearch(data, target) {
 
-            let langkah = [];
+        let kiri = 0;
+        let kanan = data.length - 1;
 
-            while (kiri <= kanan) {
+        let langkah = [];
 
-                let tengah = Math.floor((kiri + kanan) / 2);
+        while (kiri <= kanan) {
 
-                let ditemukan = data[tengah].barcode === target;
+            let tengah = Math.floor((kiri + kanan) / 2);
 
-                langkah.push({
-                    step: langkah.length + 1,
-                    kiri: kiri + 1,
-                    kanan: kanan + 1,
-                    posisi: tengah + 1,
-                    barcode: data[tengah].barcode,
-                    hasil: ditemukan
-                });
+            let barcodeTengah = data[tengah].barcode;
 
-                if (ditemukan) {
-                    return {
-                        produk: data[tengah],
-                        langkah: langkah
-                    };
-                }
+            let cocok = barcodeTengah === target;
 
-                if (target > data[tengah].barcode) {
-                    kiri = tengah + 1;
-                } else {
-                    kanan = tengah - 1;
-                }
+            langkah.push({
+
+                step: langkah.length + 1,
+
+                kiri: kiri + 1,
+
+                kanan: kanan + 1,
+
+                tengah: tengah + 1,
+
+                barcode: barcodeTengah,
+
+                cocok: cocok
+
+            });
+
+
+            if (cocok) {
+
+                return {
+                    data: data[tengah],
+                    langkah: langkah
+                };
+
             }
 
-            return {
-                produk: null,
-                langkah: langkah
-            };
-        }
 
+            if (target > barcodeTengah) {
 
-        // =========================
-        // MENAMPILKAN HASIL
-        // =========================
+                kiri = tengah + 1;
 
-        function cariProduk() {
-
-            let input = document.getElementById("barcode").value;
-
-            if (input === "") {
-                alert("Masukkan barcode terlebih dahulu!");
-                return;
-            }
-
-            let target = Number(input);
-
-            let linear = linearSearch(daftarProduk, target);
-            let binary = binarySearch(daftarProduk, target);
-
-            let html = "";
-
-            html += "<h2>Hasil Pencarian</h2>";
-
-            if (linear.produk) {
-                html += "<p><b>Barcode:</b> " + linear.produk.barcode + "</p>";
-                html += "<p><b>Produk:</b> " + linear.produk.produk + "</p>";
             } else {
-                html += "<p class='tidak'><b>Produk tidak ditemukan.</b></p>";
+
+                kanan = tengah - 1;
+
             }
 
-
-            // =========================
-            // TABEL LINEAR SEARCH
-            // =========================
-
-            html += "<h2>1. Linear Search</h2>";
-
-            html += `
-                <table>
-                    <tr>
-                        <th>Step</th>
-                        <th>Posisi</th>
-                        <th>Barcode yang Dicek</th>
-                        <th>Hasil</th>
-                    </tr>
-            `;
-
-            linear.langkah.forEach(function(item) {
-
-                html += `
-                    <tr>
-                        <td>${item.step}</td>
-                        <td>${item.posisi}</td>
-                        <td>${item.barcode}</td>
-                        <td class="${item.hasil ? 'ditemukan' : 'tidak'}">
-                            ${item.hasil ? "Ditemukan" : "Tidak"}
-                        </td>
-                    </tr>
-                `;
-
-            });
-
-            html += "</table>";
-
-
-            // =========================
-            // TABEL BINARY SEARCH
-            // =========================
-
-            html += "<h2>2. Binary Search</h2>";
-
-            html += `
-                <table>
-                    <tr>
-                        <th>Step</th>
-                        <th>Kiri</th>
-                        <th>Kanan</th>
-                        <th>Posisi Tengah</th>
-                        <th>Barcode yang Dicek</th>
-                        <th>Hasil</th>
-                    </tr>
-            `;
-
-            binary.langkah.forEach(function(item) {
-
-                html += `
-                    <tr>
-                        <td>${item.step}</td>
-                        <td>${item.kiri}</td>
-                        <td>${item.kanan}</td>
-                        <td>${item.posisi}</td>
-                        <td>${item.barcode}</td>
-                        <td class="${item.hasil ? 'ditemukan' : 'tidak'}">
-                            ${item.hasil ? "Ditemukan" : "Tidak"}
-                        </td>
-                    </tr>
-                `;
-
-            });
-
-            html += "</table>";
-
-
-            // =========================
-            // TABEL PERBANDINGAN
-            // =========================
-
-            html += "<h2>3. Perbandingan</h2>";
-
-            html += `
-                <table>
-                    <tr>
-                        <th>Metode</th>
-                        <th>Barcode</th>
-                        <th>Jumlah Perbandingan</th>
-                        <th>Hasil</th>
-                    </tr>
-
-                    <tr>
-                        <td>Linear Search</td>
-                        <td>${target}</td>
-                        <td>${linear.langkah.length}</td>
-                        <td>${linear.produk ? "Ditemukan" : "Tidak ditemukan"}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Binary Search</td>
-                        <td>${target}</td>
-                        <td>${binary.langkah.length}</td>
-                        <td>${binary.produk ? "Ditemukan" : "Tidak ditemukan"}</td>
-                    </tr>
-                </table>
-            `;
-
-
-            document.getElementById("hasil").innerHTML = html;
         }
 
-    </script>
+
+        return {
+            data: null,
+            langkah: langkah
+        };
+    }
+
+
+    // ==========================================
+    // TAMPILKAN HASIL
+    // ==========================================
+
+    function cariProduk() {
+
+        const input = document.getElementById("barcode").value;
+
+        if (input === "") {
+
+            alert("Silakan masukkan barcode terlebih dahulu!");
+
+            return;
+        }
+
+
+        const target = Number(input);
+
+
+        // Jalankan kedua metode
+
+        const linear = linearSearch(daftarProduk, target);
+
+        const binary = binarySearch(daftarProduk, target);
+
+
+        // ======================================
+        // HASIL PRODUK
+        // ======================================
+
+        let produkHTML = "";
+
+        if (linear.data) {
+
+            produkHTML = `
+
+                <div class="product-result">
+
+                    <div class="product-icon">
+                        🛒
+                    </div>
+
+                    <h2>Produk Ditemukan!</h2>
+
+                    <div class="product-name">
+                        ${linear.data.produk}
+                    </div>
+
+                    <div class="barcode-text">
+                        Barcode: <b>${linear.data.barcode}</b>
+                    </div>
+
+                </div>
+
+            `;
+
+        } else {
+
+            produkHTML = `
+
+                <div class="product-result">
+
+                    <div class="product-icon">
+                        ❌
+                    </div>
+
+                    <h2>Produk Tidak Ditemukan</h2>
+
+                    <div class="barcode-text">
+                        Barcode ${target} tidak terdapat dalam data.
+
+                    </div>
+
+                </div>
+
+            `;
+        }
+
+
+        document.getElementById("hasilProduk").innerHTML = produkHTML;
+
+
+        // ======================================
+        // CARD
+        // ======================================
+
+        document.getElementById("hasilCard").innerHTML = `
+
+            <div class="cards">
+
+                <div class="card linear">
+
+                    <div class="card-icon">
+                        🔄
+                    </div>
+
+                    <h3>Linear Search</h3>
+
+                    <div class="number">
+                        ${linear.langkah.length}
+                    </div>
+
+                    <p>Jumlah Perbandingan</p>
+
+                </div>
+
+
+                <div class="card binary">
+
+                    <div class="card-icon">
+                        ⚡
+                    </div>
+
+                    <h3>Binary Search</h3>
+
+                    <div class="number">
+                        ${binary.langkah.length}
+                    </div>
+
+                    <p>Jumlah Perbandingan</p>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        // ======================================
+        // TABEL LINEAR SEARCH
+        // ======================================
+
+        let linearHTML = `
+
+            <div class="section">
+
+                <h2>🔄 Langkah Linear Search</h2>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <tr>
+                            <th>Step</th>
+                            <th>Posisi</th>
+                            <th>Barcode</th>
+                            <th>Hasil</th>
+                        </tr>
+
+        `;
+
+
+        linear.langkah.forEach(item => {
+
+            linearHTML += `
+
+                <tr>
+
+                    <td>${item.step}</td>
+
+                    <td>${item.posisi}</td>
+
+                    <td>${item.barcode}</td>
+
+                    <td class="${item.cocok ? "found" : "not-found"}">
+
+                        ${item.cocok ? "✅ Ditemukan" : "❌ Tidak"}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        linearHTML += `
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.getElementById("linearTable").innerHTML = linearHTML;
+
+
+        // ======================================
+        // TABEL BINARY SEARCH
+        // ======================================
+
+        let binaryHTML = `
+
+            <div class="section">
+
+                <h2>⚡ Langkah Binary Search</h2>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <tr>
+
+                            <th>Step</th>
+
+                            <th>Kiri</th>
+
+                            <th>Kanan</th>
+
+                            <th>Tengah</th>
+
+                            <th>Barcode Tengah</th>
+
+                            <th>Hasil</th>
+
+                        </tr>
+
+        `;
+
+
+        binary.langkah.forEach(item => {
+
+            binaryHTML += `
+
+                <tr>
+
+                    <td>${item.step}</td>
+
+                    <td>${item.kiri}</td>
+
+                    <td>${item.kanan}</td>
+
+                    <td>${item.tengah}</td>
+
+                    <td><b>${item.barcode}</b></td>
+
+                    <td class="${item.cocok ? "found" : "not-found"}">
+
+                        ${item.cocok ? "✅ Ditemukan" : "❌ Tidak"}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        binaryHTML += `
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.getElementById("binaryTable").innerHTML = binaryHTML;
+
+
+        // ======================================
+        // PERBANDINGAN
+        // ======================================
+
+        const jumlahLinear = linear.langkah.length;
+
+        const jumlahBinary = binary.langkah.length;
+
+        const hemat = jumlahLinear - jumlahBinary;
+
+        const persen = ((hemat / jumlahLinear) * 100).toFixed(1);
+
+
+        document.getElementById("comparison").innerHTML = `
+
+            <div class="section">
+
+                <h2>📊 Perbandingan</h2>
+
+                <div class="table-wrapper">
+
+                    <table class="comparison-table">
+
+                        <tr>
+
+                            <th>Metode</th>
+
+                            <th>Barcode</th>
+
+                            <th>Jumlah Perbandingan</th>
+
+                            <th>Hasil</th>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>Linear Search</td>
+
+                            <td>${target}</td>
+
+                            <td>${jumlahLinear}</td>
+
+                            <td class="found">
+
+                                ${linear.data ? "Ditemukan" : "Tidak ditemukan"}
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>Binary Search</td>
+
+                            <td>${target}</td>
+
+                            <td>${jumlahBinary}</td>
+
+                            <td class="found">
+
+                                ${binary.data ? "Ditemukan" : "Tidak ditemukan"}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <div class="saving">
+
+                <h2>⚡ Penghematan Perbandingan</h2>
+
+                <div class="saving-number">
+
+                    ${hemat} langkah
+
+                </div>
+
+                <p>
+
+                    Binary Search melakukan sekitar
+
+                    <b>${persen}%</b>
+
+                    lebih sedikit pemeriksaan dibandingkan Linear Search.
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // ==========================================
+    // ENTER UNTUK MENCARI
+    // ==========================================
+
+    document.getElementById("barcode").addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") {
+
+            cariProduk();
+
+        }
+
+    });
+
+</script>
 
 </body>
 </html>
