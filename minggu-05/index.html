@@ -1,119 +1,346 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Binary Search Produk</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perbandingan Linear Search dan Binary Search</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            padding: 8px;
+            width: 200px;
+        }
+
+        button {
+            padding: 9px 15px;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ddd;
+        }
+
+        .ditemukan {
+            color: green;
+            font-weight: bold;
+        }
+
+        .tidak {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Pencarian Produk</h1>
+    <h1>Perbandingan Linear Search dan Binary Search</h1>
 
-    <input type="number" id="barcode" placeholder="Masukkan barcode">
-    <button onclick="cariProduk()">Cari</button>
+    <p>Masukkan barcode produk:</p>
 
-    <h3 id="hasil"></h3>
+    <input type="number" id="barcode" placeholder="Contoh: 1708">
+    <button onclick="cariProduk()">Cari Produk</button>
+
+    <div id="hasil"></div>
+
 
     <script>
+
+        // =========================
+        // DATA PRODUK
+        // =========================
 
         let daftarProduk = [
             { barcode: 1008, produk: "Sabun Lifebuoy Total 10" },
             { barcode: 1015, produk: "Shampo Pantene Anti Dandruff" },
             { barcode: 1023, produk: "Sikat Gigi Pepsodent" },
-            { barcode: 1045, produk: "Pasta Gigi Colgate MaxFresh" },
-            { barcode: 1061, produk: "Kecap Manis Bango 275ml" },
-            { barcode: 1078, produk: "Saus Sambal ABC" },
-            { barcode: 1092, produk: "Minyak Goreng Sania 2L" },
-            { barcode: 1113, produk: "Teh Celup Sariwangi" },
-            { barcode: 1124, produk: "Kopi Kapal Api Special" },
-            { barcode: 1139, produk: "Gula Pasir Gulaku 1kg" },
-            { barcode: 1156, produk: "Tepung Terigu Segitiga Biru" },
-            { barcode: 1177, produk: "Mie Instan Indomie Goreng" },
-            { barcode: 1198, produk: "Biskuit Roma Kelapa" },
-            { barcode: 1219, produk: "Snack Twisko Jagung Bakar" },
-            { barcode: 1234, produk: "Wafer Tango Cokelat" },
-            { barcode: 1251, produk: "Susu UHT Ultra Milk Cokelat" },
-            { barcode: 1266, produk: "Yogurt Cimory Strawberry" },
-            { barcode: 1282, produk: "Jus Buavita Jambu" },
-            { barcode: 1305, produk: "Air Mineral Aqua 600ml" },
-            { barcode: 1321, produk: "Deterjen Rinso Anti Noda" },
-            { barcode: 1344, produk: "Pewangi Molto Pure" },
-            { barcode: 1367, produk: "Pembersih Lantai Super Pell" },
-            { barcode: 1388, produk: "Sabun Cuci Piring Sunlight" },
-            { barcode: 1409, produk: "Obat Nyamuk Baygon" },
-            { barcode: 1423, produk: "Baterai ABC Alkaline AA" },
-            { barcode: 1447, produk: "Deodoran Rexona Men" },
-            { barcode: 1468, produk: "Parfum Axe Cokelat" },
-            { barcode: 1489, produk: "Sabun Muka Garnier Men" },
-            { barcode: 1512, produk: "Hand Sanitizer Antis" },
-            { barcode: 1533, produk: "Tisu Wajah Paseo" },
-            { barcode: 1555, produk: "Popok Bayi MamyPoko" },
-            { barcode: 1578, produk: "Beras Sania 5kg" },
-            { barcode: 1599, produk: "Telur Ayam Negeri (per kg)" },
-            { barcode: 1621, produk: "Roti Tawar Sari Roti" },
-            { barcode: 1645, produk: "Selai Cokelat Nutella" },
-            { barcode: 1666, produk: "Keju Kraft Cheddar" },
+            { barcode: 1045, produk: "Pasta Gigi Pepsodent" },
+            { barcode: 1067, produk: "Sabun Lux Soft Touch" },
+            { barcode: 1089, produk: "Shampo Clear Men" },
+            { barcode: 1102, produk: "Deodorant Rexona" },
+            { barcode: 1124, produk: "Tisu Paseo" },
+            { barcode: 1148, produk: "Minyak Goreng Bimoli" },
+            { barcode: 1175, produk: "Beras Sania 5kg" },
+            { barcode: 1199, produk: "Gula Pasir Gulaku" },
+            { barcode: 1210, produk: "Tepung Terigu Segitiga Biru" },
+            { barcode: 1234, produk: "Mie Instan Indomie Goreng" },
+            { barcode: 1256, produk: "Mie Instan Sedaap Goreng" },
+            { barcode: 1278, produk: "Kecap Bango" },
+            { barcode: 1301, produk: "Saus Sambal ABC" },
+            { barcode: 1325, produk: "Teh Celup Sariwangi" },
+            { barcode: 1347, produk: "Kopi Kapal Api" },
+            { barcode: 1369, produk: "Susu UHT Ultra Milk" },
+            { barcode: 1392, produk: "Susu Dancow" },
+            { barcode: 1415, produk: "Susu Frisian Flag" },
+            { barcode: 1423, produk: "Biskuit Roma Kelapa" },
+            { barcode: 1445, produk: "Biskuit Oreo" },
+            { barcode: 1467, produk: "Wafer Tango" },
+            { barcode: 1489, produk: "Cokelat SilverQueen" },
+            { barcode: 1512, produk: "Permen Kopiko" },
+            { barcode: 1534, produk: "Keripik Kentang Chitato" },
+            { barcode: 1555, produk: "Snack Taro" },
+            { barcode: 1578, produk: "Sereal Energen" },
+            { barcode: 1601, produk: "Air Mineral Aqua" },
+            { barcode: 1623, produk: "Teh Botol Sosro" },
+            { barcode: 1645, produk: "Minuman Pocari Sweat" },
+            { barcode: 1666, produk: "Minuman Yakult" },
             { barcode: 1687, produk: "Sarden ABC Tomat" },
             { barcode: 1708, produk: "Kornet Sapi Pronas" },
             { barcode: 1729, produk: "Bubur Bayi Sun Pisang" },
-            { barcode: 1751, produk: "Pembalut Charm Body Fit" },
-            { barcode: 1774, produk: "Cokelat SilverQueen" },
-            { barcode: 1798, produk: "Permen Kiss Mint" },
-            { barcode: 1823, produk: "Keripik Kentang Chitato" },
-            { barcode: 1845, produk: "Minuman Soda Coca-Cola" },
-            { barcode: 1867, produk: "Sirup Marjan Cocopandan" },
-            { barcode: 1888, produk: "Es Krim Walls Magnum" },
-            { barcode: 1910, produk: "Sereal Koko Krunch" },
-            { barcode: 1932, produk: "Mentega Blue Band" },
-            { barcode: 1956, produk: "Sambal Terasi Uleg" },
+            { barcode: 1751, produk: "Popok Bayi MamyPoko" },
+            { barcode: 1773, produk: "Pembalut Charm" },
+            { barcode: 1795, produk: "Cotton Buds Selection" },
+            { barcode: 1817, produk: "Tisu Basah Cussons" },
+            { barcode: 1839, produk: "Pembersih Lantai Wipol" },
+            { barcode: 1861, produk: "Sabun Cuci Rinso" },
+            { barcode: 1883, produk: "Pelembut Molto" },
+            { barcode: 1905, produk: "Pewangi Ruangan Stella" },
+            { barcode: 1927, produk: "Obat Nyamuk Baygon" },
+            { barcode: 1949, produk: "Pasta Gigi Close Up" },
+            { barcode: 1961, produk: "Sabun Dettol" },
+            { barcode: 1975, produk: "Shampo Sunsilk" },
+            { barcode: 1987, produk: "Kopi Sachet Good Day" },
             { barcode: 1999, produk: "Kopi Sachet Nescafe Classic" }
         ];
 
 
-        // Fungsi Binary Search
-        function binarySearch(data, barcode) {
+        // =========================
+        // LINEAR SEARCH
+        // =========================
+
+        function linearSearch(data, target) {
+
+            let langkah = [];
+
+            for (let i = 0; i < data.length; i++) {
+
+                let ditemukan = data[i].barcode === target;
+
+                langkah.push({
+                    step: i + 1,
+                    posisi: i + 1,
+                    barcode: data[i].barcode,
+                    hasil: ditemukan
+                });
+
+                if (ditemukan) {
+                    return {
+                        produk: data[i],
+                        langkah: langkah
+                    };
+                }
+            }
+
+            return {
+                produk: null,
+                langkah: langkah
+            };
+        }
+
+
+        // =========================
+        // BINARY SEARCH
+        // =========================
+
+        function binarySearch(data, target) {
 
             let kiri = 0;
             let kanan = data.length - 1;
+
+            let langkah = [];
 
             while (kiri <= kanan) {
 
                 let tengah = Math.floor((kiri + kanan) / 2);
 
-                if (data[tengah].barcode === barcode) {
-                    return data[tengah];
+                let ditemukan = data[tengah].barcode === target;
+
+                langkah.push({
+                    step: langkah.length + 1,
+                    kiri: kiri + 1,
+                    kanan: kanan + 1,
+                    posisi: tengah + 1,
+                    barcode: data[tengah].barcode,
+                    hasil: ditemukan
+                });
+
+                if (ditemukan) {
+                    return {
+                        produk: data[tengah],
+                        langkah: langkah
+                    };
                 }
 
-                if (barcode > data[tengah].barcode) {
+                if (target > data[tengah].barcode) {
                     kiri = tengah + 1;
                 } else {
                     kanan = tengah - 1;
                 }
             }
 
-            return null;
+            return {
+                produk: null,
+                langkah: langkah
+            };
         }
 
 
-        // Fungsi ketika tombol Cari diklik
+        // =========================
+        // MENAMPILKAN HASIL
+        // =========================
+
         function cariProduk() {
 
             let input = document.getElementById("barcode").value;
 
-            let barcode = Number(input);
-
-            let hasil = binarySearch(daftarProduk, barcode);
-
-            if (hasil) {
-
-                document.getElementById("hasil").innerHTML =
-                    "Barcode: " + hasil.barcode +
-                    "<br>Produk: " + hasil.produk;
-
-            } else {
-
-                document.getElementById("hasil").innerHTML =
-                    "Barcode " + barcode + " tidak ditemukan.";
+            if (input === "") {
+                alert("Masukkan barcode terlebih dahulu!");
+                return;
             }
+
+            let target = Number(input);
+
+            let linear = linearSearch(daftarProduk, target);
+            let binary = binarySearch(daftarProduk, target);
+
+            let html = "";
+
+            html += "<h2>Hasil Pencarian</h2>";
+
+            if (linear.produk) {
+                html += "<p><b>Barcode:</b> " + linear.produk.barcode + "</p>";
+                html += "<p><b>Produk:</b> " + linear.produk.produk + "</p>";
+            } else {
+                html += "<p class='tidak'><b>Produk tidak ditemukan.</b></p>";
+            }
+
+
+            // =========================
+            // TABEL LINEAR SEARCH
+            // =========================
+
+            html += "<h2>1. Linear Search</h2>";
+
+            html += `
+                <table>
+                    <tr>
+                        <th>Step</th>
+                        <th>Posisi</th>
+                        <th>Barcode yang Dicek</th>
+                        <th>Hasil</th>
+                    </tr>
+            `;
+
+            linear.langkah.forEach(function(item) {
+
+                html += `
+                    <tr>
+                        <td>${item.step}</td>
+                        <td>${item.posisi}</td>
+                        <td>${item.barcode}</td>
+                        <td class="${item.hasil ? 'ditemukan' : 'tidak'}">
+                            ${item.hasil ? "Ditemukan" : "Tidak"}
+                        </td>
+                    </tr>
+                `;
+
+            });
+
+            html += "</table>";
+
+
+            // =========================
+            // TABEL BINARY SEARCH
+            // =========================
+
+            html += "<h2>2. Binary Search</h2>";
+
+            html += `
+                <table>
+                    <tr>
+                        <th>Step</th>
+                        <th>Kiri</th>
+                        <th>Kanan</th>
+                        <th>Posisi Tengah</th>
+                        <th>Barcode yang Dicek</th>
+                        <th>Hasil</th>
+                    </tr>
+            `;
+
+            binary.langkah.forEach(function(item) {
+
+                html += `
+                    <tr>
+                        <td>${item.step}</td>
+                        <td>${item.kiri}</td>
+                        <td>${item.kanan}</td>
+                        <td>${item.posisi}</td>
+                        <td>${item.barcode}</td>
+                        <td class="${item.hasil ? 'ditemukan' : 'tidak'}">
+                            ${item.hasil ? "Ditemukan" : "Tidak"}
+                        </td>
+                    </tr>
+                `;
+
+            });
+
+            html += "</table>";
+
+
+            // =========================
+            // TABEL PERBANDINGAN
+            // =========================
+
+            html += "<h2>3. Perbandingan</h2>";
+
+            html += `
+                <table>
+                    <tr>
+                        <th>Metode</th>
+                        <th>Barcode</th>
+                        <th>Jumlah Perbandingan</th>
+                        <th>Hasil</th>
+                    </tr>
+
+                    <tr>
+                        <td>Linear Search</td>
+                        <td>${target}</td>
+                        <td>${linear.langkah.length}</td>
+                        <td>${linear.produk ? "Ditemukan" : "Tidak ditemukan"}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Binary Search</td>
+                        <td>${target}</td>
+                        <td>${binary.langkah.length}</td>
+                        <td>${binary.produk ? "Ditemukan" : "Tidak ditemukan"}</td>
+                    </tr>
+                </table>
+            `;
+
+
+            document.getElementById("hasil").innerHTML = html;
         }
 
     </script>
