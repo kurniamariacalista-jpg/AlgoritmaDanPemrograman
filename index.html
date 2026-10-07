@@ -1,2284 +1,588 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>SmartMart - Sistem Pencarian Produk</title>
-
-    <style>
-
-        /* =====================================================
-           RESET
-        ===================================================== */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-
-        /* =====================================================
-           BODY
-        ===================================================== */
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-
-            background: #f3f6f4;
-
-            color: #263238;
-
-            min-height: 100vh;
-        }
-
-
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
-
-        .topbar {
-            background: #087f5b;
-
-            color: white;
-
-            height: 58px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding: 0 7%;
-
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        }
-
-
-        .store-name {
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            font-size: 20px;
-
-            font-weight: bold;
-        }
-
-
-        .store-icon {
-            background: white;
-
-            color: #087f5b;
-
-            width: 34px;
-
-            height: 34px;
-
-            border-radius: 9px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 20px;
-        }
-
-
-        .cashier {
-            font-size: 14px;
-
-            opacity: 0.9;
-        }
-
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
-
-        .hero {
-            background:
-                linear-gradient(
-                    135deg,
-                    #0b8f65,
-                    #10a873
-                );
-
-            color: white;
-
-            padding: 45px 7% 70px;
-
-            position: relative;
-
-            overflow: hidden;
-        }
-
-
-        .hero::after {
-            content: "🛒";
-
-            position: absolute;
-
-            right: 8%;
-
-            top: 20px;
-
-            font-size: 150px;
-
-            opacity: 0.08;
-        }
-
-
-        .hero-content {
-            max-width: 1250px;
-
-            margin: auto;
-
-            position: relative;
-
-            z-index: 2;
-        }
-
-
-        .small-label {
-            display: inline-block;
-
-            background: #ffd43b;
-
-            color: #513f00;
-
-            padding: 7px 14px;
-
-            border-radius: 30px;
-
-            font-size: 13px;
-
-            font-weight: bold;
-
-            margin-bottom: 15px;
-        }
-
-
-        .hero h1 {
-            font-size: 40px;
-
-            margin-bottom: 10px;
-        }
-
-
-        .hero h1 span {
-            color: #fff3bf;
-        }
-
-
-        .hero p {
-            max-width: 650px;
-
-            line-height: 1.6;
-
-            color: #e6fcf5;
-        }
-
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
-
-        .container {
-            max-width: 1250px;
-
-            margin: -35px auto 50px;
-
-            padding: 0 20px;
-
-            position: relative;
-
-            z-index: 5;
-        }
-
-
-        /* =====================================================
-           SEARCH PANEL
-        ===================================================== */
-
-        .search-panel {
-            background: white;
-
-            border-radius: 16px;
-
-            padding: 25px;
-
-            box-shadow:
-                0 8px 25px rgba(0, 0, 0, 0.10);
-
-            margin-bottom: 25px;
-        }
-
-
-        .search-title {
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-bottom: 18px;
-        }
-
-
-        .search-title h2 {
-            font-size: 21px;
-
-            color: #087f5b;
-        }
-
-
-        .search-form {
-            display: flex;
-
-            gap: 10px;
-        }
-
-
-        .search-form input {
-            flex: 1;
-
-            padding: 14px 16px;
-
-            border: 2px solid #dee2e6;
-
-            border-radius: 9px;
-
-            font-size: 16px;
-
-            outline: none;
-        }
-
-
-        .search-form input:focus {
-            border-color: #0ca678;
-        }
-
-
-        .search-button {
-            border: none;
-
-            background: #f08c00;
-
-            color: white;
-
-            padding: 0 28px;
-
-            border-radius: 9px;
-
-            font-size: 16px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            transition: 0.2s;
-        }
-
-
-        .search-button:hover {
-            background: #e67700;
-
-            transform: translateY(-1px);
-        }
-
-
-        .example {
-            margin-top: 10px;
-
-            color: #868e96;
-
-            font-size: 13px;
-        }
-
-
-        /* =====================================================
-           PRODUCT CARD
-        ===================================================== */
-
-        .product-card {
-            background: white;
-
-            border-radius: 16px;
-
-            overflow: hidden;
-
-            margin-bottom: 25px;
-
-            box-shadow:
-                0 5px 20px rgba(0, 0, 0, 0.08);
-
-            display: none;
-        }
-
-
-        .product-top {
-            background: #e6fcf5;
-
-            padding: 25px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 20px;
-
-            border-bottom: 1px solid #c3fae8;
-        }
-
-
-        .product-image {
-            width: 85px;
-
-            height: 85px;
-
-            background: white;
-
-            border-radius: 14px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 45px;
-
-            box-shadow:
-                0 3px 10px rgba(0, 0, 0, 0.08);
-        }
-
-
-        .product-info {
-            flex: 1;
-        }
-
-
-        .found-label {
-            color: #087f5b;
-
-            font-size: 13px;
-
-            font-weight: bold;
-
-            margin-bottom: 5px;
-        }
-
-
-        .product-info h2 {
-            font-size: 25px;
-
-            color: #212529;
-
-            margin-bottom: 5px;
-        }
-
-
-        .product-code {
-            color: #868e96;
-
-            font-size: 14px;
-        }
-
-
-        .product-status {
-            background: #2f9e44;
-
-            color: white;
-
-            padding: 9px 15px;
-
-            border-radius: 30px;
-
-            font-size: 13px;
-
-            font-weight: bold;
-        }
-
-
-        .product-bottom {
-            padding: 20px 25px;
-
-            display: flex;
-
-            gap: 35px;
-
-            color: #495057;
-
-            font-size: 14px;
-        }
-
-
-        .product-bottom strong {
-            color: #087f5b;
-        }
-
-
-        /* =====================================================
-           STATISTICS
-        ===================================================== */
-
-        .stats {
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 15px;
-
-            margin-bottom: 25px;
-        }
-
-
-        .stat-card {
-            background: white;
-
-            padding: 22px;
-
-            border-radius: 14px;
-
-            box-shadow:
-                0 4px 15px rgba(0, 0, 0, 0.06);
-
-            border-top: 4px solid #087f5b;
-        }
-
-
-        .stat-card.orange {
-            border-top-color: #f08c00;
-        }
-
-
-        .stat-card.blue {
-            border-top-color: #1971c2;
-        }
-
-
-        .stat-card.yellow {
-            border-top-color: #fab005;
-        }
-
-
-        .stat-icon {
-            font-size: 25px;
-
-            margin-bottom: 8px;
-        }
-
-
-        .stat-label {
-            color: #868e96;
-
-            font-size: 13px;
-
-            margin-bottom: 5px;
-        }
-
-
-        .stat-number {
-            font-size: 30px;
-
-            font-weight: bold;
-
-            color: #212529;
-        }
-
-
-        /* =====================================================
-           SECTION
-        ===================================================== */
-
-        .section {
-            background: white;
-
-            border-radius: 16px;
-
-            padding: 25px;
-
-            margin-bottom: 25px;
-
-            box-shadow:
-                0 4px 18px rgba(0, 0, 0, 0.06);
-        }
-
-
-        .section-header {
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            margin-bottom: 20px;
-        }
-
-
-        .section-title {
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            color: #087f5b;
-
-            font-size: 21px;
-
-            font-weight: bold;
-        }
-
-
-        .section-badge {
-            padding: 6px 12px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-        }
-
-
-        .badge-orange {
-            background: #fff4e6;
-
-            color: #e67700;
-        }
-
-
-        .badge-blue {
-            background: #e7f5ff;
-
-            color: #1971c2;
-        }
-
-
-        /* =====================================================
-           COMPARISON VISUAL
-        ===================================================== */
-
-        .comparison-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 20px;
-        }
-
-
-        .method-card {
-            border: 1px solid #e9ecef;
-
-            border-radius: 14px;
-
-            padding: 22px;
-        }
-
-
-        .method-head {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 15px;
-        }
-
-
-        .method-name {
-            font-weight: bold;
-
-            font-size: 17px;
-        }
-
-
-        .method-number {
-            font-size: 25px;
-
-            font-weight: bold;
-        }
-
-
-        .linear-color {
-            color: #e67700;
-        }
-
-
-        .binary-color {
-            color: #1971c2;
-        }
-
-
-        .progress-bg {
-            height: 18px;
-
-            background: #f1f3f5;
-
-            border-radius: 20px;
-
-            overflow: hidden;
-        }
-
-
-        .progress {
-            height: 100%;
-
-            width: 0;
-
-            border-radius: 20px;
-
-            transition: width 1s ease;
-        }
-
-
-        .linear-progress {
-            background:
-                linear-gradient(
-                    90deg,
-                    #f08c00,
-                    #ffa94d
-                );
-        }
-
-
-        .binary-progress {
-            background:
-                linear-gradient(
-                    90deg,
-                    #1971c2,
-                    #4dabf7
-                );
-        }
-
-
-        .method-description {
-            color: #868e96;
-
-            font-size: 13px;
-
-            margin-top: 12px;
-
-            line-height: 1.5;
-        }
-
-
-        /* =====================================================
-           SAVING
-        ===================================================== */
-
-        .saving-box {
-            background:
-                linear-gradient(
-                    135deg,
-                    #087f5b,
-                    #099268
-                );
-
-            color: white;
-
-            border-radius: 16px;
-
-            padding: 25px;
-
-            margin-bottom: 25px;
-
-            text-align: center;
-
-            box-shadow:
-                0 8px 20px rgba(8, 127, 91, 0.20);
-        }
-
-
-        .saving-box h2 {
-            font-size: 20px;
-
-            margin-bottom: 8px;
-        }
-
-
-        .saving-number {
-            font-size: 38px;
-
-            font-weight: bold;
-
-            color: #fff3bf;
-
-            margin: 8px 0;
-        }
-
-
-        .saving-box p {
-            color: #d3f9d8;
-
-            font-size: 14px;
-        }
-
-
-        /* =====================================================
-           TABLE
-        ===================================================== */
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-
-        table {
-            width: 100%;
-
-            border-collapse: collapse;
-
-            min-width: 650px;
-        }
-
-
-        th {
-            background: #087f5b;
-
-            color: white;
-
-            padding: 13px;
-
-            text-align: center;
-
-            font-size: 14px;
-        }
-
-
-        td {
-            padding: 12px;
-
-            text-align: center;
-
-            border-bottom: 1px solid #e9ecef;
-
-            font-size: 14px;
-        }
-
-
-        tr:hover td {
-            background: #f8fdfb;
-        }
-
-
-        .found {
-            color: #2f9e44;
-
-            font-weight: bold;
-        }
-
-
-        .not-found {
-            color: #e03131;
-        }
-
-
-        .last-row td {
-            background: #e6fcf5;
-
-            font-weight: bold;
-        }
-
-
-        /* =====================================================
-           FINAL RESULT
-        ===================================================== */
-
-        .final-table th {
-            background: #343a40;
-        }
-
-
-        .linear-row td:first-child {
-            color: #e67700;
-
-            font-weight: bold;
-        }
-
-
-        .binary-row td:first-child {
-            color: #1971c2;
-
-            font-weight: bold;
-        }
-
-
-        /* =====================================================
-           INFORMATION
-        ===================================================== */
-
-        .info-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 20px;
-        }
-
-
-        .info-card {
-            border-radius: 14px;
-
-            padding: 20px;
-
-            border: 1px solid #e9ecef;
-        }
-
-
-        .info-card.linear {
-            background: #fffaf3;
-
-            border-left: 5px solid #f08c00;
-        }
-
-
-        .info-card.binary {
-            background: #f4f9ff;
-
-            border-left: 5px solid #1971c2;
-        }
-
-
-        .info-card h3 {
-            margin-bottom: 10px;
-        }
-
-
-        .info-card p {
-            color: #6c757d;
-
-            line-height: 1.7;
-
-            font-size: 14px;
-        }
-
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        footer {
-            text-align: center;
-
-            padding: 25px;
-
-            color: #868e96;
-
-            font-size: 13px;
-        }
-
-
-        footer strong {
-            color: #087f5b;
-        }
-
-
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
-
-        @media (max-width: 850px) {
-
-            .stats {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-
-            .comparison-grid,
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .hero h1 {
-                font-size: 30px;
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            body {
-                font-size: 14px;
-            }
-
-
-            .topbar {
-                padding: 0 20px;
-            }
-
-
-            .cashier {
-                display: none;
-            }
-
-
-            .hero {
-                padding: 35px 20px 65px;
-            }
-
-
-            .container {
-                padding: 0 12px;
-            }
-
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-
-            .search-form {
-                flex-direction: column;
-            }
-
-
-            .search-button {
-                padding: 14px;
-            }
-
-
-            .product-top {
-                flex-direction: column;
-
-                text-align: center;
-            }
-
-
-            .product-bottom {
-                flex-direction: column;
-
-                gap: 8px;
-            }
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maria Kalista Kurnia | Algoritma & Pemrograman</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #fffaf7;
+      color: #3d3030;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 78vh;
+      padding: 32px 7% 70px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(circle at 90% 15%, rgba(255, 214, 225, .8), transparent 28%),
+        radial-gradient(circle at 10% 90%, rgba(255, 231, 198, .7), transparent 30%),
+        linear-gradient(135deg, #fff8f3, #fff0f5);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      opacity: .55;
+    }
+
+    .hero::before {
+      width: 190px;
+      height: 190px;
+      background: #ffd9e5;
+      right: -55px;
+      top: 110px;
+    }
+
+    .hero::after {
+      width: 130px;
+      height: 130px;
+      background: #ffe4bd;
+      left: -35px;
+      bottom: 20px;
+    }
+
+    nav {
+      position: absolute;
+      top: 22px;
+      left: 7%;
+      right: 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: .5px;
+      color: #a84f70;
+    }
+
+    .nav-btn {
+      padding: 10px 18px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.8);
+      border: 1px solid #f2d6df;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      margin: 65px auto 0;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .identity {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 30px;
+      background: #fff;
+      border: 1px solid #f3d6df;
+      color: #a84f70;
+      font-weight: 700;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(140, 77, 98, .08);
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1.02;
+      color: #563942;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: clamp(17px, 2vw, 21px);
+      color: #755d64;
+      max-width: 680px;
+      margin: 0 auto 28px;
+    }
+
+    .nim {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 800;
+      color: #9b5a70;
+      background: #fff;
+      padding: 9px 18px;
+      border-radius: 12px;
+      border: 1px dashed #e6b9c8;
+      letter-spacing: 1px;
+    }
+
+    /* ===== SECTION ===== */
+    .section {
+      padding: 75px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .section-title span {
+      color: #b85f7e;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-title h2 {
+      font-size: clamp(30px, 5vw, 46px);
+      color: #4d373d;
+      margin-top: 7px;
+    }
+
+    .section-title p {
+      color: #806b71;
+      margin-top: 8px;
+    }
+
+    /* ===== WEEK CARDS ===== */
+    .weeks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .card {
+      position: relative;
+      min-height: 245px;
+      padding: 28px;
+      border-radius: 26px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid #f0dfe4;
+      box-shadow: 0 14px 35px rgba(100, 58, 70, .08);
+      transition: .25s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 20px 42px rgba(100, 58, 70, .13);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: #fff0f4;
+      right: -20px;
+      bottom: -20px;
+    }
+
+    .week {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #b45c79;
+      text-transform: uppercase;
+    }
+
+    .icon {
+      width: 55px;
+      height: 55px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      background: #fff1f5;
+      font-size: 27px;
+      margin: 15px 0;
+    }
+
+    .card h3 {
+      font-size: 24px;
+      color: #513a40;
+      margin-bottom: 7px;
+    }
+
+    .card p {
+      color: #806e73;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 11px;
+      border-radius: 20px;
+      background: #f7f2f3;
+      color: #8b777c;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .active {
+      border-color: #eab9ca;
+    }
+
+    .active .status {
+      background: #fce5ed;
+      color: #a84f70;
+    }
+
+    /* ===== ABOUT ===== */
+    .about {
+      max-width: 900px;
+      margin: 20px auto 0;
+      padding: 34px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #fff, #fff5f7);
+      border: 1px solid #f1dce2;
+      text-align: center;
+    }
+
+    .about p {
+      color: #75636a;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 30px 7%;
+      text-align: center;
+      background: #49363c;
+      color: #fbeef2;
+      font-size: 13px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 850px) {
+      .weeks {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      nav {
+        left: 5%;
+        right: 5%;
+      }
+
+      .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+
+      .section {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+
+      .weeks {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: 215px;
+      }
+
+      .brand {
+        font-size: 14px;
+      }
+
+      .nav-btn {
+        padding: 8px 12px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <!-- ===== HALAMAN UTAMA ===== -->
+  <header class="hero" id="beranda">
 
-<!-- =====================================================
-     TOP BAR
-===================================================== -->
+    <nav>
+      <div class="brand">✦ PORTOFOLIO TUGAS</div>
 
-<div class="topbar">
-
-    <div class="store-name">
-
-        <div class="store-icon">
-            🛒
-        </div>
-
-        SMARTMART
-
-    </div>
-
-
-    <div class="cashier">
-
-        🟢 Sistem Kasir Online
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
-<div class="hero">
+      <a class="nav-btn" href="#minggu">
+        Lihat Tugas ↓
+      </a>
+    </nav>
 
     <div class="hero-content">
 
-        <div class="small-label">
-            🏪 SUPERMARKET SYSTEM
-        </div>
+      <div class="identity">
+        Maria Kalista Kurnia
+      </div>
+
+      <h1>
+        Algoritma &amp;<br>
+        Pemrograman
+      </h1>
+
+      <p class="subtitle">
+        Kumpulan tugas dan project pembelajaran
+        Algoritma &amp; Pemrograman yang disusun
+        dengan rapi, kreatif, dan penuh semangat. ✨
+      </p>
+
+      <div class="nim">
+        NIM: 31250007
+      </div>
+
+    </div>
+  </header>
 
 
-        <h1>
-            SmartMart
-            <span>Product Search</span>
-        </h1>
+  <!-- ===== DAFTAR MINGGU ===== -->
+  <main>
 
+    <section class="section" id="minggu">
+
+      <div class="section-title">
+
+        <span>My Learning Journey</span>
+
+        <h2>
+          Daftar Tugas Mingguan
+        </h2>
 
         <p>
-            Sistem pencarian barcode produk supermarket
-            menggunakan perbandingan algoritma
-            Linear Search dan Binary Search.
+          Pilih minggu untuk melihat tugas yang tersedia.
         </p>
 
-    </div>
-
-</div>
+      </div>
 
 
+      <div class="weeks">
 
-<!-- =====================================================
-     MAIN
-===================================================== -->
+        <!-- MINGGU 1 -->
+        <div class="card">
 
-<div class="container">
+          <div class="week">
+            Minggu 01
+          </div>
 
+          <div class="icon">
+            🌷
+          </div>
 
-    <!-- =================================================
-         SEARCH
-    ================================================== -->
+          <h3>
+            Minggu Pertama
+          </h3>
 
-    <div class="search-panel">
+          <p>
+            Belum ada tugas website yang tersedia.
+          </p>
 
-        <div class="search-title">
-
-            <span>🔎</span>
-
-            <h2>
-                Cari Produk
-            </h2>
-
-        </div>
-
-
-        <div class="search-form">
-
-            <input
-                type="number"
-                id="barcode"
-                placeholder="Masukkan barcode produk..."
-            >
-
-
-            <button
-                class="search-button"
-                onclick="cariProduk()"
-            >
-                🔍 CARI PRODUK
-            </button>
+          <span class="status">
+            Belum ada tugas
+          </span>
 
         </div>
 
 
-        <div class="example">
+        <!-- MINGGU 2 -->
+        <div class="card">
 
-            Contoh barcode:
-            <b>1708</b>
-            untuk mencari Kornet Sapi Pronas
+          <div class="week">
+            Minggu 02
+          </div>
 
-        </div>
+          <div class="icon">
+            🌸
+          </div>
 
-    </div>
+          <h3>
+            Minggu Kedua
+          </h3>
 
+          <p>
+            Belum ada tugas website yang tersedia.
+          </p>
 
-
-    <!-- =================================================
-         PRODUCT RESULT
-    ================================================== -->
-
-    <div
-        id="productCard"
-        class="product-card"
-    ></div>
-
-
-
-    <!-- =================================================
-         STATISTICS
-    ================================================== -->
-
-    <div
-        id="stats"
-        class="stats"
-    ></div>
-
-
-
-    <!-- =================================================
-         COMPARISON
-    ================================================== -->
-
-    <div
-        id="comparison"
-        class="section"
-    ></div>
-
-
-
-    <!-- =================================================
-         SAVING
-    ================================================== -->
-
-    <div
-        id="saving"
-        class="saving-box"
-    ></div>
-
-
-
-    <!-- =================================================
-         LINEAR TABLE
-    ================================================== -->
-
-    <div
-        id="linearSection"
-        class="section"
-    ></div>
-
-
-
-    <!-- =================================================
-         BINARY TABLE
-    ================================================== -->
-
-    <div
-        id="binarySection"
-        class="section"
-    ></div>
-
-
-
-    <!-- =================================================
-         FINAL COMPARISON
-    ================================================== -->
-
-    <div
-        id="finalSection"
-        class="section"
-    ></div>
-
-
-
-    <!-- =================================================
-         INFORMATION
-    ================================================== -->
-
-    <div class="section">
-
-        <div class="section-header">
-
-            <div class="section-title">
-                📚 Informasi Algoritma
-            </div>
+          <span class="status">
+            Belum ada tugas
+          </span>
 
         </div>
 
 
-        <div class="info-grid">
+        <!-- MINGGU 3 -->
+        <div class="card">
 
+          <div class="week">
+            Minggu 03
+          </div>
 
-            <div class="info-card linear">
+          <div class="icon">
+            🌼
+          </div>
 
-                <h3>
-                    🟠 Linear Search
-                </h3>
+          <h3>
+            Minggu Ketiga
+          </h3>
 
-                <p>
+          <p>
+            Belum ada tugas website yang tersedia.
+          </p>
 
-                    Linear Search memeriksa data satu per satu
-                    mulai dari posisi pertama sampai barcode
-                    yang dicari ditemukan.
-
-                    <br><br>
-
-                    Pada pencarian barcode 1708, algoritma ini
-                    membutuhkan <b>35 perbandingan</b>.
-
-                </p>
-
-            </div>
-
-
-            <div class="info-card binary">
-
-                <h3>
-                    🔵 Binary Search
-                </h3>
-
-                <p>
-
-                    Binary Search memeriksa data bagian tengah,
-                    kemudian mempersempit area pencarian ke
-                    bagian kiri atau kanan.
-
-                    <br><br>
-
-                    Karena data barcode sudah terurut,
-                    pencarian barcode 1708 membutuhkan
-                    <b>6 perbandingan</b>.
-
-                </p>
-
-            </div>
-
+          <span class="status">
+            Belum ada tugas
+          </span>
 
         </div>
 
-    </div>
-
 
+        <!-- MINGGU 4 -->
+        <a class="card active" href="minggu-04/">
 
-</div>
+          <div class="week">
+            Minggu 04
+          </div>
 
+          <div class="icon">
+            💻
+          </div>
 
+          <h3>
+            Minggu Keempat
+          </h3>
 
-<!-- =====================================================
-     FOOTER
-===================================================== -->
+          <p>
+            Buka tugas Algoritma &amp; Pemrograman
+            Minggu 4.
+          </p>
 
-<footer>
+          <span class="status">
+            Buka tugas →
+          </span>
 
-    🛒 <strong>SmartMart</strong>
+        </a>
 
-    &nbsp;|&nbsp;
 
-    Praktikum Algoritma dan Pemrograman
+        <!-- MINGGU 5 -->
+        <a class="card active" href="minggu-05/">
 
-</footer>
+          <div class="week">
+            Minggu 05
+          </div>
 
+          <div class="icon">
+            🛒
+          </div>
 
+          <h3>
+            SmartMart
+          </h3>
 
-<script>
+          <p>
+            Sistem pencarian produk dengan
+            perbandingan Linear Search dan
+            Binary Search.
+          </p>
 
+          <span class="status">
+            Buka tugas →
+          </span>
 
-    /* =====================================================
-       DATA PRODUK
-    ===================================================== */
+        </a>
 
-    const daftarProduk = [
 
-        { barcode: 1008, produk: "Sabun Lifebuoy Total 10" },
-        { barcode: 1015, produk: "Shampo Pantene Anti Dandruff" },
-        { barcode: 1023, produk: "Sikat Gigi Pepsodent" },
-        { barcode: 1045, produk: "Pasta Gigi Pepsodent" },
-        { barcode: 1067, produk: "Sabun Lux Soft Touch" },
-        { barcode: 1089, produk: "Shampo Clear Men" },
-        { barcode: 1102, produk: "Deodorant Rexona" },
-        { barcode: 1124, produk: "Tisu Paseo" },
-        { barcode: 1148, produk: "Minyak Goreng Bimoli" },
-        { barcode: 1175, produk: "Beras Sania 5kg" },
-        { barcode: 1199, produk: "Gula Pasir Gulaku" },
-        { barcode: 1210, produk: "Tepung Terigu Segitiga Biru" },
-        { barcode: 1234, produk: "Mie Instan Indomie Goreng" },
-        { barcode: 1256, produk: "Mie Instan Sedaap Goreng" },
-        { barcode: 1278, produk: "Kecap Bango" },
-        { barcode: 1301, produk: "Saus Sambal ABC" },
-        { barcode: 1325, produk: "Teh Celup Sariwangi" },
-        { barcode: 1347, produk: "Kopi Kapal Api" },
-        { barcode: 1369, produk: "Susu UHT Ultra Milk" },
-        { barcode: 1392, produk: "Susu Dancow" },
-        { barcode: 1415, produk: "Susu Frisian Flag" },
-        { barcode: 1423, produk: "Biskuit Roma Kelapa" },
-        { barcode: 1445, produk: "Biskuit Oreo" },
-        { barcode: 1467, produk: "Wafer Tango" },
-        { barcode: 1489, produk: "Cokelat SilverQueen" },
-        { barcode: 1512, produk: "Permen Kopiko" },
-        { barcode: 1534, produk: "Keripik Kentang Chitato" },
-        { barcode: 1555, produk: "Snack Taro" },
-        { barcode: 1578, produk: "Sereal Energen" },
-        { barcode: 1601, produk: "Air Mineral Aqua" },
-        { barcode: 1623, produk: "Teh Botol Sosro" },
-        { barcode: 1645, produk: "Minuman Pocari Sweat" },
-        { barcode: 1666, produk: "Minuman Yakult" },
-        { barcode: 1687, produk: "Sarden ABC Tomat" },
-        { barcode: 1708, produk: "Kornet Sapi Pronas" },
-        { barcode: 1729, produk: "Bubur Bayi Sun Pisang" },
-        { barcode: 1751, produk: "Popok Bayi MamyPoko" },
-        { barcode: 1773, produk: "Pembalut Charm" },
-        { barcode: 1795, produk: "Cotton Buds Selection" },
-        { barcode: 1817, produk: "Tisu Basah Cussons" },
-        { barcode: 1839, produk: "Pembersih Lantai Wipol" },
-        { barcode: 1861, produk: "Sabun Cuci Rinso" },
-        { barcode: 1883, produk: "Pelembut Molto" },
-        { barcode: 1905, produk: "Pewangi Ruangan Stella" },
-        { barcode: 1927, produk: "Obat Nyamuk Baygon" },
-        { barcode: 1949, produk: "Pasta Gigi Close Up" },
-        { barcode: 1961, produk: "Sabun Dettol" },
-        { barcode: 1975, produk: "Shampo Sunsilk" },
-        { barcode: 1987, produk: "Kopi Sachet Good Day" },
-        { barcode: 1999, produk: "Kopi Sachet Nescafe Classic" }
+        <!-- MINGGU 6 -->
+        <a class="card active" href="minggu-06/">
 
-    ];
+          <div class="week">
+            Minggu 06
+          </div>
 
+          <div class="icon">
+            ✨
+          </div>
 
+          <h3>
+            Minggu Keenam
+          </h3>
 
-    /* =====================================================
-       LINEAR SEARCH
-    ===================================================== */
+          <p>
+            Buka tugas Algoritma &amp; Pemrograman
+            Minggu 6.
+          </p>
 
-    function linearSearch(data, target) {
+          <span class="status">
+            Buka tugas →
+          </span>
 
-        let langkah = [];
+        </a>
 
-        for (
-            let i = 0;
-            i < data.length;
-            i++
-        ) {
+      </div>
 
-            let cocok =
-                data[i].barcode === target;
+    </section>
 
 
-            langkah.push({
+    <!-- ===== ABOUT ===== -->
+    <section class="section">
 
-                step: i + 1,
+      <div class="about">
 
-                posisi: i + 1,
+        <div class="section-title" style="margin-bottom:16px;">
 
-                barcode: data[i].barcode,
+          <span>
+            About This Website
+          </span>
 
-                cocok: cocok
+          <h2>
+            Belajar • Berkarya • Berkembang
+          </h2>
 
-            });
+        </div>
 
+        <p>
+          Website ini merupakan halaman utama untuk
+          mengumpulkan tugas Algoritma &amp; Pemrograman.
+          Setiap project ditempatkan pada bagian minggu
+          masing-masing agar mudah dilihat dan dinilai.
+        </p>
 
-            if (cocok) {
+      </div>
 
-                return {
+    </section>
 
-                    data: data[i],
+  </main>
 
-                    langkah: langkah
 
-                };
+  <!-- ===== FOOTER ===== -->
+  <footer>
 
-            }
+    © 2026 Maria Kalista Kurnia
+    · NIM 31250007
+    · Algoritma &amp; Pemrograman ✦
 
-        }
-
-
-        return {
-
-            data: null,
-
-            langkah: langkah
-
-        };
-
-    }
-
-
-
-    /* =====================================================
-       BINARY SEARCH
-    ===================================================== */
-
-    function binarySearch(data, target) {
-
-        let kiri = 0;
-
-        let kanan =
-            data.length - 1;
-
-        let langkah = [];
-
-
-        while (kiri <= kanan) {
-
-            let tengah =
-                Math.floor(
-                    (kiri + kanan) / 2
-                );
-
-
-            let barcodeTengah =
-                data[tengah].barcode;
-
-
-            let cocok =
-                barcodeTengah === target;
-
-
-            langkah.push({
-
-                step:
-                    langkah.length + 1,
-
-                kiri:
-                    kiri + 1,
-
-                kanan:
-                    kanan + 1,
-
-                tengah:
-                    tengah + 1,
-
-                barcode:
-                    barcodeTengah,
-
-                cocok:
-                    cocok
-
-            });
-
-
-            if (cocok) {
-
-                return {
-
-                    data:
-                        data[tengah],
-
-                    langkah:
-                        langkah
-
-                };
-
-            }
-
-
-            if (
-                target >
-                barcodeTengah
-            ) {
-
-                kiri =
-                    tengah + 1;
-
-            } else {
-
-                kanan =
-                    tengah - 1;
-
-            }
-
-        }
-
-
-        return {
-
-            data: null,
-
-            langkah: langkah
-
-        };
-
-    }
-
-
-
-    /* =====================================================
-       CARI PRODUK
-    ===================================================== */
-
-    function cariProduk() {
-
-        let input =
-            document.getElementById(
-                "barcode"
-            ).value;
-
-
-        if (input === "") {
-
-            alert(
-                "Masukkan barcode produk terlebih dahulu!"
-            );
-
-            return;
-
-        }
-
-
-        let target =
-            Number(input);
-
-
-        let linear =
-            linearSearch(
-                daftarProduk,
-                target
-            );
-
-
-        let binary =
-            binarySearch(
-                daftarProduk,
-                target
-            );
-
-
-        let linearCount =
-            linear.langkah.length;
-
-
-        let binaryCount =
-            binary.langkah.length;
-
-
-        let saving =
-            linearCount -
-            binaryCount;
-
-
-        let percentage =
-            linearCount > 0
-                ? (
-                    saving /
-                    linearCount *
-                    100
-                ).toFixed(1)
-                : 0;
-
-
-
-        /* =================================================
-           PRODUCT CARD
-        ================================================= */
-
-        let productCard =
-            document.getElementById(
-                "productCard"
-            );
-
-
-        productCard.style.display =
-            "block";
-
-
-        if (linear.data) {
-
-            productCard.innerHTML = `
-
-                <div class="product-top">
-
-                    <div class="product-image">
-                        🥫
-                    </div>
-
-
-                    <div class="product-info">
-
-                        <div class="found-label">
-                            ✓ PRODUK DITEMUKAN
-                        </div>
-
-                        <h2>
-                            ${linear.data.produk}
-                        </h2>
-
-                        <div class="product-code">
-                            Barcode:
-                            <b>
-                                ${linear.data.barcode}
-                            </b>
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-status">
-                        TERSEDIA
-                    </div>
-
-                </div>
-
-
-                <div class="product-bottom">
-
-                    <div>
-                        📦 Status:
-                        <strong>
-                            Produk ditemukan
-                        </strong>
-                    </div>
-
-                    <div>
-                        🏪 Kategori:
-                        <strong>
-                            Produk Supermarket
-                        </strong>
-                    </div>
-
-                    <div>
-                        🔎 Dicari dengan:
-                        <strong>
-                            2 Algoritma
-                        </strong>
-                    </div>
-
-                </div>
-
-            `;
-
-        } else {
-
-            productCard.innerHTML = `
-
-                <div class="product-top">
-
-                    <div class="product-image">
-                        ❌
-                    </div>
-
-
-                    <div class="product-info">
-
-                        <div class="found-label">
-                            PRODUK TIDAK DITEMUKAN
-                        </div>
-
-                        <h2>
-                            Barcode ${target}
-                        </h2>
-
-                        <div class="product-code">
-                            Data produk tidak tersedia
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        /* =================================================
-           STATISTICS
-        ================================================= */
-
-        document.getElementById(
-            "stats"
-        ).innerHTML = `
-
-            <div class="stat-card orange">
-
-                <div class="stat-icon">
-                    🔄
-                </div>
-
-                <div class="stat-label">
-                    LINEAR SEARCH
-                </div>
-
-                <div class="stat-number">
-                    ${linearCount}
-                </div>
-
-            </div>
-
-
-            <div class="stat-card blue">
-
-                <div class="stat-icon">
-                    ⚡
-                </div>
-
-                <div class="stat-label">
-                    BINARY SEARCH
-                </div>
-
-                <div class="stat-number">
-                    ${binaryCount}
-                </div>
-
-            </div>
-
-
-            <div class="stat-card yellow">
-
-                <div class="stat-icon">
-                    📉
-                </div>
-
-                <div class="stat-label">
-                    LANGKAH DIHEMAT
-                </div>
-
-                <div class="stat-number">
-                    ${saving}
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    📦
-                </div>
-
-                <div class="stat-label">
-                    TOTAL PRODUK
-                </div>
-
-                <div class="stat-number">
-                    ${daftarProduk.length}
-                </div>
-
-            </div>
-
-        `;
-
-
-
-        /* =================================================
-           COMPARISON
-        ================================================= */
-
-        document.getElementById(
-            "comparison"
-        ).innerHTML = `
-
-            <div class="section-header">
-
-                <div class="section-title">
-                    📊 Perbandingan Pencarian
-                </div>
-
-            </div>
-
-
-            <div class="comparison-grid">
-
-
-                <div class="method-card">
-
-                    <div class="method-head">
-
-                        <div class="method-name">
-                            🟠 Linear Search
-                        </div>
-
-                        <div
-                            class="method-number linear-color"
-                        >
-                            ${linearCount}
-                        </div>
-
-                    </div>
-
-
-                    <div class="progress-bg">
-
-                        <div
-                            id="linearProgress"
-                            class="progress linear-progress"
-                        ></div>
-
-                    </div>
-
-
-                    <div class="method-description">
-
-                        Memeriksa produk satu per satu
-                        dari posisi pertama hingga
-                        barcode ditemukan.
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="method-card">
-
-                    <div class="method-head">
-
-                        <div class="method-name">
-                            🔵 Binary Search
-                        </div>
-
-                        <div
-                            class="method-number binary-color"
-                        >
-                            ${binaryCount}
-                        </div>
-
-                    </div>
-
-
-                    <div class="progress-bg">
-
-                        <div
-                            id="binaryProgress"
-                            class="progress binary-progress"
-                        ></div>
-
-                    </div>
-
-
-                    <div class="method-description">
-
-                        Memeriksa posisi tengah dan
-                        mempersempit area pencarian
-                        ke kiri atau kanan.
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        `;
-
-
-        setTimeout(function() {
-
-            document.getElementById(
-                "linearProgress"
-            ).style.width =
-                "100%";
-
-
-            document.getElementById(
-                "binaryProgress"
-            ).style.width =
-                (
-                    binaryCount /
-                    linearCount *
-                    100
-                ) + "%";
-
-        }, 100);
-
-
-
-        /* =================================================
-           SAVING
-        ================================================= */
-
-        document.getElementById(
-            "saving"
-        ).innerHTML = `
-
-            <h2>
-                ⚡ Efisiensi Pencarian
-            </h2>
-
-            <div class="saving-number">
-
-                ${saving} langkah lebih sedikit
-
-            </div>
-
-            <p>
-
-                Linear Search:
-                <b>${linearCount}</b>
-                perbandingan
-
-                &nbsp; vs &nbsp;
-
-                Binary Search:
-                <b>${binaryCount}</b>
-                perbandingan
-
-                <br><br>
-
-                Binary Search mengurangi
-                pemeriksaan sebesar
-                <b>${percentage}%</b>.
-
-            </p>
-
-        `;
-
-
-
-        /* =================================================
-           LINEAR TABLE
-        ================================================= */
-
-        let linearHTML = `
-
-            <div class="section-header">
-
-                <div class="section-title">
-                    🔄 Langkah Linear Search
-                </div>
-
-                <div
-                    class="section-badge badge-orange"
-                >
-                    ${linearCount}
-                    Perbandingan
-                </div>
-
-            </div>
-
-
-            <div class="table-wrapper">
-
-            <table>
-
-                <tr>
-
-                    <th>
-                        Step
-                    </th>
-
-                    <th>
-                        Posisi
-                    </th>
-
-                    <th>
-                        Barcode Dicek
-                    </th>
-
-                    <th>
-                        Hasil
-                    </th>
-
-                </tr>
-
-        `;
-
-
-        linear.langkah.forEach(
-            function(item) {
-
-                linearHTML += `
-
-                    <tr
-                        class="${
-                            item.cocok
-                            ? "last-row"
-                            : ""
-                        }"
-                    >
-
-                        <td>
-                            ${item.step}
-                        </td>
-
-                        <td>
-                            ${item.posisi}
-                        </td>
-
-                        <td>
-                            ${item.barcode}
-                        </td>
-
-                        <td
-                            class="${
-                                item.cocok
-                                ? "found"
-                                : "not-found"
-                            }"
-                        >
-
-                            ${
-                                item.cocok
-                                ? "✓ Ditemukan"
-                                : "✕ Tidak"
-                            }
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        );
-
-
-        linearHTML += `
-
-            </table>
-
-            </div>
-
-        `;
-
-
-        document.getElementById(
-            "linearSection"
-        ).innerHTML =
-            linearHTML;
-
-
-
-        /* =================================================
-           BINARY TABLE
-        ================================================= */
-
-        let binaryHTML = `
-
-            <div class="section-header">
-
-                <div class="section-title">
-                    🔵 Langkah Binary Search
-                </div>
-
-                <div
-                    class="section-badge badge-blue"
-                >
-                    ${binaryCount}
-                    Perbandingan
-                </div>
-
-            </div>
-
-
-            <div class="table-wrapper">
-
-            <table>
-
-                <tr>
-
-                    <th>
-                        Step
-                    </th>
-
-                    <th>
-                        Kiri
-                    </th>
-
-                    <th>
-                        Kanan
-                    </th>
-
-                    <th>
-                        Tengah
-                    </th>
-
-                    <th>
-                        Barcode Tengah
-                    </th>
-
-                    <th>
-                        Hasil
-                    </th>
-
-                </tr>
-
-        `;
-
-
-        binary.langkah.forEach(
-            function(item) {
-
-                binaryHTML += `
-
-                    <tr
-                        class="${
-                            item.cocok
-                            ? "last-row"
-                            : ""
-                        }"
-                    >
-
-                        <td>
-                            ${item.step}
-                        </td>
-
-                        <td>
-                            ${item.kiri}
-                        </td>
-
-                        <td>
-                            ${item.kanan}
-                        </td>
-
-                        <td>
-                            ${item.tengah}
-                        </td>
-
-                        <td>
-                            <b>
-                                ${item.barcode}
-                            </b>
-                        </td>
-
-                        <td
-                            class="${
-                                item.cocok
-                                ? "found"
-                                : "not-found"
-                            }"
-                        >
-
-                            ${
-                                item.cocok
-                                ? "✓ Ditemukan"
-                                : "✕ Tidak"
-                            }
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        );
-
-
-        binaryHTML += `
-
-            </table>
-
-            </div>
-
-        `;
-
-
-        document.getElementById(
-            "binarySection"
-        ).innerHTML =
-            binaryHTML;
-
-
-
-        /* =================================================
-           FINAL TABLE
-        ================================================= */
-
-        document.getElementById(
-            "finalSection"
-        ).innerHTML = `
-
-            <div class="section-header">
-
-                <div class="section-title">
-                    🧾 Ringkasan Hasil Pencarian
-                </div>
-
-            </div>
-
-
-            <div class="table-wrapper">
-
-            <table class="final-table">
-
-                <tr>
-
-                    <th>
-                        Metode
-                    </th>
-
-                    <th>
-                        Barcode
-                    </th>
-
-                    <th>
-                        Jumlah Perbandingan
-                    </th>
-
-                    <th>
-                        Hasil
-                    </th>
-
-                </tr>
-
-
-                <tr class="linear-row">
-
-                    <td>
-                        🟠 Linear Search
-                    </td>
-
-                    <td>
-                        ${target}
-                    </td>
-
-                    <td>
-                        <b>
-                            ${linearCount}
-                        </b>
-                    </td>
-
-                    <td class="found">
-
-                        ${
-                            linear.data
-                            ? "✓ Ditemukan"
-                            : "✕ Tidak ditemukan"
-                        }
-
-                    </td>
-
-                </tr>
-
-
-                <tr class="binary-row">
-
-                    <td>
-                        🔵 Binary Search
-                    </td>
-
-                    <td>
-                        ${target}
-                    </td>
-
-                    <td>
-                        <b>
-                            ${binaryCount}
-                        </b>
-                    </td>
-
-                    <td class="found">
-
-                        ${
-                            binary.data
-                            ? "✓ Ditemukan"
-                            : "✕ Tidak ditemukan"
-                        }
-
-                    </td>
-
-                </tr>
-
-            </table>
-
-            </div>
-
-        `;
-
-    }
-
-
-
-    /* =====================================================
-       ENTER KEY
-    ===================================================== */
-
-    document
-        .getElementById("barcode")
-        .addEventListener(
-            "keydown",
-            function(event) {
-
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    cariProduk();
-
-                }
-
-            }
-        );
-
-</script>
-
+  </footer>
 
 </body>
-
 </html>
