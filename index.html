@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Maria Kalista Kurnia | Algoritma & Pemrograman</title>
 
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+
     html {
       scroll-behavior: smooth;
     }
+
 
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -23,482 +31,957 @@
       line-height: 1.6;
     }
 
+
     a {
       text-decoration: none;
       color: inherit;
     }
 
-    /* ===== HERO ===== */
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
     .hero {
       min-height: 78vh;
+
       padding: 32px 7% 70px;
+
       position: relative;
+
       overflow: hidden;
+
       display: flex;
+
       align-items: center;
+
       background:
-        radial-gradient(circle at 90% 15%, rgba(255, 214, 225, .8), transparent 28%),
-        radial-gradient(circle at 10% 90%, rgba(255, 231, 198, .7), transparent 30%),
-        linear-gradient(135deg, #fff8f3, #fff0f5);
+        radial-gradient(
+          circle at 90% 15%,
+          rgba(255, 214, 225, .8),
+          transparent 28%
+        ),
+
+        radial-gradient(
+          circle at 10% 90%,
+          rgba(255, 231, 198, .7),
+          transparent 30%
+        ),
+
+        linear-gradient(
+          135deg,
+          #fff8f3,
+          #fff0f5
+        );
     }
+
 
     .hero::before,
     .hero::after {
       content: "";
+
       position: absolute;
+
       border-radius: 50%;
+
       opacity: .55;
     }
+
 
     .hero::before {
       width: 190px;
       height: 190px;
+
       background: #ffd9e5;
+
       right: -55px;
       top: 110px;
     }
 
+
     .hero::after {
       width: 130px;
       height: 130px;
+
       background: #ffe4bd;
+
       left: -35px;
       bottom: 20px;
     }
 
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
     nav {
       position: absolute;
+
       top: 22px;
+
       left: 7%;
       right: 7%;
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       z-index: 2;
     }
 
+
     .brand {
       font-weight: 800;
+
       letter-spacing: .5px;
+
       color: #a84f70;
     }
+
 
     .nav-btn {
       padding: 10px 18px;
+
       border-radius: 30px;
+
       background: rgba(255,255,255,.8);
+
       border: 1px solid #f2d6df;
+
       font-size: 14px;
+
       font-weight: 700;
     }
+
+
+
+    /* =====================================================
+       HERO CONTENT
+    ===================================================== */
 
     .hero-content {
       max-width: 900px;
+
       margin: 65px auto 0;
+
       text-align: center;
+
       position: relative;
+
       z-index: 1;
     }
 
+
     .identity {
       display: inline-block;
+
       padding: 8px 20px;
+
       border-radius: 30px;
+
       background: #fff;
+
       border: 1px solid #f3d6df;
+
       color: #a84f70;
+
       font-weight: 700;
+
       margin-bottom: 18px;
-      box-shadow: 0 8px 24px rgba(140, 77, 98, .08);
+
+      box-shadow:
+        0 8px 24px rgba(140, 77, 98, .08);
     }
+
 
     h1 {
       font-size: clamp(42px, 7vw, 76px);
+
       line-height: 1.02;
+
       color: #563942;
+
       margin-bottom: 16px;
     }
 
+
     .subtitle {
       font-size: clamp(17px, 2vw, 21px);
+
       color: #755d64;
+
       max-width: 680px;
+
       margin: 0 auto 28px;
     }
 
+
     .nim {
       display: inline-block;
+
       font-size: 15px;
+
       font-weight: 800;
+
       color: #9b5a70;
+
       background: #fff;
+
       padding: 9px 18px;
+
       border-radius: 12px;
+
       border: 1px dashed #e6b9c8;
+
       letter-spacing: 1px;
     }
 
-    /* ===== SECTION ===== */
+
+
+    /* =====================================================
+       SECTION
+    ===================================================== */
+
     .section {
       padding: 75px 7%;
     }
 
+
     .section-title {
       text-align: center;
+
       margin-bottom: 42px;
     }
 
+
     .section-title span {
       color: #b85f7e;
+
       font-weight: 800;
+
       font-size: 14px;
+
       letter-spacing: 2px;
+
       text-transform: uppercase;
     }
 
+
     .section-title h2 {
       font-size: clamp(30px, 5vw, 46px);
+
       color: #4d373d;
+
       margin-top: 7px;
     }
 
+
     .section-title p {
       color: #806b71;
+
       margin-top: 8px;
     }
 
-    /* ===== WEEK CARDS ===== */
+
+
+    /* =====================================================
+       WEEK CARDS
+    ===================================================== */
+
     .weeks {
       display: grid;
+
       grid-template-columns: repeat(3, 1fr);
+
       gap: 22px;
+
       max-width: 1100px;
+
       margin: auto;
     }
 
+
     .card {
       position: relative;
+
       min-height: 245px;
+
       padding: 28px;
+
       border-radius: 26px;
+
       background: rgba(255,255,255,.92);
+
       border: 1px solid #f0dfe4;
-      box-shadow: 0 14px 35px rgba(100, 58, 70, .08);
+
+      box-shadow:
+        0 14px 35px rgba(100, 58, 70, .08);
+
       transition: .25s ease;
+
       overflow: hidden;
     }
 
+
     .card:hover {
       transform: translateY(-7px);
-      box-shadow: 0 20px 42px rgba(100, 58, 70, .13);
+
+      box-shadow:
+        0 20px 42px rgba(100, 58, 70, .13);
     }
+
 
     .card::after {
       content: "";
+
       position: absolute;
+
       width: 85px;
       height: 85px;
+
       border-radius: 50%;
+
       background: #fff0f4;
+
       right: -20px;
       bottom: -20px;
     }
 
+
     .week {
       font-size: 13px;
+
       font-weight: 800;
+
       letter-spacing: 1.5px;
+
       color: #b45c79;
+
       text-transform: uppercase;
     }
+
 
     .icon {
       width: 55px;
       height: 55px;
+
       display: grid;
+
       place-items: center;
+
       border-radius: 17px;
+
       background: #fff1f5;
+
       font-size: 27px;
+
       margin: 15px 0;
     }
 
+
     .card h3 {
       font-size: 24px;
+
       color: #513a40;
+
       margin-bottom: 7px;
     }
 
+
     .card p {
       color: #806e73;
+
       font-size: 14px;
+
       margin-bottom: 18px;
     }
 
+
     .status {
       display: inline-block;
+
       padding: 6px 11px;
+
       border-radius: 20px;
+
       background: #f7f2f3;
+
       color: #8b777c;
+
       font-size: 12px;
+
       font-weight: 700;
     }
+
 
     .active {
       border-color: #eab9ca;
     }
 
+
     .active .status {
       background: #fce5ed;
+
       color: #a84f70;
     }
 
-    /* ===== ABOUT ===== */
+
+
+    /* =====================================================
+       ABOUT
+    ===================================================== */
+
     .about {
       max-width: 900px;
+
       margin: 20px auto 0;
+
       padding: 34px;
+
       border-radius: 28px;
-      background: linear-gradient(135deg, #fff, #fff5f7);
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff,
+          #fff5f7
+        );
+
       border: 1px solid #f1dce2;
+
       text-align: center;
     }
+
 
     .about p {
       color: #75636a;
     }
 
-    /* ===== FOOTER ===== */
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
     footer {
       padding: 30px 7%;
+
       text-align: center;
+
       background: #49363c;
+
       color: #fbeef2;
+
       font-size: 13px;
     }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 850px) {
-      .weeks {
-        grid-template-columns: repeat(2, 1fr);
-      }
+
+
+    /* =====================================================
+       MUSIC BUTTON
+    ===================================================== */
+
+    .music-button {
+
+      position: fixed;
+
+      right: 24px;
+
+      bottom: 24px;
+
+      z-index: 9999;
+
+
+      border: 1px solid #f2d6df;
+
+      background: rgba(255,255,255,.95);
+
+      color: #a84f70;
+
+
+      padding: 12px 18px;
+
+      border-radius: 30px;
+
+
+      font-family: "Segoe UI", Arial, sans-serif;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+
+      cursor: pointer;
+
+
+      box-shadow:
+        0 10px 30px rgba(100, 58, 70, .15);
+
+
+      transition: all .3s ease;
+
     }
+
+
+    .music-button:hover {
+
+      transform: translateY(-4px);
+
+      background: #a84f70;
+
+      color: white;
+
+      box-shadow:
+        0 15px 35px rgba(100, 58, 70, .20);
+
+    }
+
+
+    .music-button.playing {
+
+      background: #a84f70;
+
+      color: white;
+
+      animation: musicPulse 1.5s infinite;
+
+    }
+
+
+    @keyframes musicPulse {
+
+      0% {
+
+        box-shadow:
+          0 0 0 0 rgba(168, 79, 112, .35);
+
+      }
+
+      70% {
+
+        box-shadow:
+          0 0 0 12px rgba(168, 79, 112, 0);
+
+      }
+
+      100% {
+
+        box-shadow:
+          0 0 0 0 rgba(168, 79, 112, 0);
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 850px) {
+
+      .weeks {
+
+        grid-template-columns: repeat(2, 1fr);
+
+      }
+
+    }
+
 
     @media (max-width: 560px) {
+
       nav {
+
         left: 5%;
+
         right: 5%;
+
       }
+
 
       .hero {
+
         padding-left: 5%;
+
         padding-right: 5%;
+
       }
+
 
       .section {
+
         padding-left: 5%;
+
         padding-right: 5%;
+
       }
+
 
       .weeks {
+
         grid-template-columns: 1fr;
+
       }
+
 
       .card {
+
         min-height: 215px;
+
       }
+
 
       .brand {
+
         font-size: 14px;
+
       }
 
+
       .nav-btn {
+
         padding: 8px 12px;
+
       }
+
+
+      .music-button {
+
+        right: 16px;
+
+        bottom: 16px;
+
+        padding: 10px 14px;
+
+        font-size: 12px;
+
+      }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- ===== HALAMAN UTAMA ===== -->
+
+  <!-- =====================================================
+       BACKGROUND MUSIC
+  ===================================================== -->
+
+  <audio id="backgroundMusic" loop>
+
+    <source
+      src="musik/background.mp3"
+      type="audio/mpeg"
+    >
+
+    Browser kamu tidak mendukung audio.
+
+  </audio>
+
+
+  <!-- =====================================================
+       MUSIC BUTTON
+  ===================================================== -->
+
+  <button
+    class="music-button"
+    id="musicButton"
+    onclick="toggleMusic()"
+  >
+
+    ♫
+    <span id="musicText">
+      Putar Musik
+    </span>
+
+  </button>
+
+
+
+  <!-- =====================================================
+       HALAMAN UTAMA
+  ===================================================== -->
+
   <header class="hero" id="beranda">
 
-    <nav>
-      <div class="brand">✦ PORTOFOLIO TUGAS</div>
 
-      <a class="nav-btn" href="#minggu">
+    <nav>
+
+      <div class="brand">
+        ✦ PORTOFOLIO TUGAS
+      </div>
+
+
+      <a
+        class="nav-btn"
+        href="#minggu"
+      >
         Lihat Tugas ↓
       </a>
+
     </nav>
 
+
+
     <div class="hero-content">
+
 
       <div class="identity">
         Maria Kalista Kurnia
       </div>
 
+
       <h1>
+
         Algoritma &amp;<br>
+
         Pemrograman
+
       </h1>
 
+
       <p class="subtitle">
+
         Kumpulan tugas dan project pembelajaran
         Algoritma &amp; Pemrograman yang disusun
         dengan rapi, kreatif, dan penuh semangat. ✨
+
       </p>
 
+
       <div class="nim">
+
         NIM: 31250007
+
       </div>
 
+
     </div>
+
   </header>
 
 
-  <!-- ===== DAFTAR MINGGU ===== -->
+
+  <!-- =====================================================
+       DAFTAR MINGGU
+  ===================================================== -->
+
   <main>
 
-    <section class="section" id="minggu">
+
+    <section
+      class="section"
+      id="minggu"
+    >
+
 
       <div class="section-title">
 
-        <span>My Learning Journey</span>
+
+        <span>
+          My Learning Journey
+        </span>
+
 
         <h2>
           Daftar Tugas Mingguan
         </h2>
 
+
         <p>
           Pilih minggu untuk melihat tugas yang tersedia.
         </p>
 
+
       </div>
+
 
 
       <div class="weeks">
 
-        <!-- MINGGU 1 -->
+
+        <!-- =================================================
+             MINGGU 1
+        ================================================= -->
+
         <div class="card">
+
 
           <div class="week">
             Minggu 01
           </div>
 
+
           <div class="icon">
             🌷
           </div>
+
 
           <h3>
             Minggu Pertama
           </h3>
 
+
           <p>
             Belum ada tugas website yang tersedia.
           </p>
+
 
           <span class="status">
             Belum ada tugas
           </span>
 
+
         </div>
 
 
-        <!-- MINGGU 2 -->
+
+        <!-- =================================================
+             MINGGU 2
+        ================================================= -->
+
         <div class="card">
+
 
           <div class="week">
             Minggu 02
           </div>
 
+
           <div class="icon">
             🌸
           </div>
+
 
           <h3>
             Minggu Kedua
           </h3>
 
+
           <p>
             Belum ada tugas website yang tersedia.
           </p>
+
 
           <span class="status">
             Belum ada tugas
           </span>
 
+
         </div>
 
 
-        <!-- MINGGU 3 -->
+
+        <!-- =================================================
+             MINGGU 3
+        ================================================= -->
+
         <div class="card">
+
 
           <div class="week">
             Minggu 03
           </div>
 
+
           <div class="icon">
             🌼
           </div>
+
 
           <h3>
             Minggu Ketiga
           </h3>
 
+
           <p>
             Belum ada tugas website yang tersedia.
           </p>
+
 
           <span class="status">
             Belum ada tugas
           </span>
 
+
         </div>
 
 
-        <!-- MINGGU 4 -->
-        <a class="card active" href="minggu-04/">
+
+        <!-- =================================================
+             MINGGU 4
+        ================================================= -->
+
+        <a
+          class="card active"
+          href="minggu-04/"
+        >
+
 
           <div class="week">
             Minggu 04
           </div>
 
+
           <div class="icon">
             💻
           </div>
 
+
           <h3>
             Minggu Keempat
           </h3>
+
 
           <p>
             Buka tugas Algoritma &amp; Pemrograman
             Minggu 4.
           </p>
 
+
           <span class="status">
             Buka tugas →
           </span>
 
+
         </a>
 
 
-        <!-- MINGGU 5 -->
-        <a class="card active" href="minggu-05/">
+
+        <!-- =================================================
+             MINGGU 5
+        ================================================= -->
+
+        <a
+          class="card active"
+          href="minggu-05/"
+        >
+
 
           <div class="week">
             Minggu 05
           </div>
 
+
           <div class="icon">
             🛒
           </div>
 
+
           <h3>
             SmartMart
           </h3>
+
 
           <p>
             Sistem pencarian produk dengan
@@ -506,76 +989,114 @@
             Binary Search.
           </p>
 
+
           <span class="status">
             Buka tugas →
           </span>
 
+
         </a>
 
 
-        <!-- MINGGU 6 -->
-        <a class="card active" href="minggu-06/">
+
+        <!-- =================================================
+             MINGGU 6
+        ================================================= -->
+
+        <a
+          class="card active"
+          href="minggu-06/"
+        >
+
 
           <div class="week">
             Minggu 06
           </div>
 
+
           <div class="icon">
             ✨
           </div>
 
+
           <h3>
             Minggu Keenam
           </h3>
+
 
           <p>
             Buka tugas Algoritma &amp; Pemrograman
             Minggu 6.
           </p>
 
+
           <span class="status">
             Buka tugas →
           </span>
 
+
         </a>
+
 
       </div>
 
     </section>
 
 
-    <!-- ===== ABOUT ===== -->
+
+    <!-- =====================================================
+         ABOUT
+    ===================================================== -->
+
     <section class="section">
+
 
       <div class="about">
 
-        <div class="section-title" style="margin-bottom:16px;">
+
+        <div
+          class="section-title"
+          style="margin-bottom:16px;"
+        >
+
 
           <span>
             About This Website
           </span>
 
+
           <h2>
             Belajar • Berkarya • Berkembang
           </h2>
 
+
         </div>
 
+
         <p>
+
           Website ini merupakan halaman utama untuk
           mengumpulkan tugas Algoritma &amp; Pemrograman.
           Setiap project ditempatkan pada bagian minggu
           masing-masing agar mudah dilihat dan dinilai.
+
         </p>
+
 
       </div>
 
+
     </section>
+
 
   </main>
 
 
-  <!-- ===== FOOTER ===== -->
+
+  <!-- =====================================================
+       FOOTER
+  ===================================================== -->
+
   <footer>
 
     © 2026 Maria Kalista Kurnia
@@ -584,5 +1105,75 @@
 
   </footer>
 
+
+
+  <!-- =====================================================
+       MUSIC JAVASCRIPT
+  ===================================================== -->
+
+  <script>
+
+    const backgroundMusic =
+      document.getElementById("backgroundMusic");
+
+
+    const musicButton =
+      document.getElementById("musicButton");
+
+
+    const musicText =
+      document.getElementById("musicText");
+
+
+
+    function toggleMusic() {
+
+
+      if (backgroundMusic.paused) {
+
+
+        backgroundMusic
+          .play()
+          .then(() => {
+
+            musicText.textContent =
+              "Matikan Musik";
+
+            musicButton.classList.add(
+              "playing"
+            );
+
+          })
+          .catch(() => {
+
+            alert(
+              "Musik belum bisa diputar. Pastikan file background.mp3 sudah ada di folder musik."
+            );
+
+          });
+
+
+      } else {
+
+
+        backgroundMusic.pause();
+
+
+        musicText.textContent =
+          "Putar Musik";
+
+
+        musicButton.classList.remove(
+          "playing"
+        );
+
+      }
+
+    }
+
+  </script>
+
+
 </body>
+
 </html>
