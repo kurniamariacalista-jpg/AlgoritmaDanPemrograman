@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minggu 6 | Bubble Sort</title>
+
+  <style>
+    :root {
+      --pink: #b45d7a;
+      --pink-light: #f9e9ee;
+      --cream: #fffaf6;
+      --text: #44363b;
+      --muted: #8b777e;
+      --green: #557d68;
+      --border: #f0dce3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    header {
+      padding: 22px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 250, 246, 0.95);
+    }
+
+    .brand {
+      color: var(--pink);
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    header a {
+      color: var(--pink);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero {
+      padding: 72px 8% 58px;
+      background:
+        radial-gradient(circle at 85% 15%, #f5dce5, transparent 32%),
+        linear-gradient(135deg, #fffaf6, #fceef2);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 30px;
+      background: white;
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 62px);
+      line-height: 1.12;
+      letter-spacing: -2px;
+      max-width: 750px;
+      margin-bottom: 20px;
+    }
+
+    h1 span {
+      color: var(--pink);
+    }
+
+    .hero p {
+      max-width: 630px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1100px;
+      padding: 0 24px;
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 48px 0;
+    }
+
+    .section-label {
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: 27px;
+      margin: 7px 0 10px;
+    }
+
+    .description {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 28px;
+    }
+
+    .stat, .panel, .step {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--pink);
+      font-size: 28px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .panel {
+      padding: 24px;
+      box-shadow: 0 12px 35px rgba(100, 50, 70, 0.045);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    button {
+      border: 0;
+      border-radius: 11px;
+      padding: 12px 17px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      transition: transform .2s, opacity .2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: .9;
+    }
+
+    .primary {
+      color: white;
+      background: var(--pink);
+    }
+
+    .secondary {
+      background: var(--pink-light);
+      color: var(--pink);
+    }
+
+    .neutral {
+      background: #edf3ee;
+      color: var(--green);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 450px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 13px 16px;
+      border-bottom: 1px solid #f4e9ed;
+    }
+
+    th {
+      background: #fcf0f4;
+      color: #875066;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #fff9fb;
+    }
+
+    .score {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    #status {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 14px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .step {
+      position: relative;
+    }
+
+    .step b {
+      display: block;
+      color: var(--pink);
+      margin-bottom: 5px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .code {
+      background: #332a30;
+      color: #fbeaf0;
+      padding: 22px;
+      border-radius: 16px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.9;
+      margin-top: 20px;
+      white-space: pre;
+    }
+
+    .note {
+      padding: 18px;
+      background: #f0f5f0;
+      color: #466b56;
+      border-radius: 14px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 30px 20px;
+      background: #49363e;
+      color: #f9eaf0;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 18px 5%;
+      }
+
+      .hero {
+        padding: 55px 6% 45px;
+      }
+
+      main {
+        padding: 0 18px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      h2 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">MARIA'S CLASSROOM</div>
+    <a href="../">← Halaman Utama</a>
+  </header>
+
+  <div class="hero">
+    <span class="tag">ALGORITMA & PEMROGRAMAN · MINGGU 06</span>
+    <h1>Sorting Student Scores with <span>Bubble Sort.</span></h1>
+    <p>
+      Mengenal algoritma pengurutan melalui data nilai mahasiswa.
+      Pilih ascending atau descending dan lihat bagaimana hasil
+      pengurutan berubah secara langsung.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <strong id="total">10</strong>
+        <span>Data mahasiswa</span>
+      </div>
+      <div class="stat">
+        <strong>2</strong>
+        <span>Metode pengurutan</span>
+      </div>
+      <div class="stat">
+        <strong>O(n²)</strong>
+        <span>Kompleksitas waktu terburuk</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section>
+      <span class="section-label">01 / Student Data</span>
+      <h2>Data Nilai Mahasiswa</h2>
+      <p class="description">
+        Berikut 10 data contoh nama mahasiswa beserta nilai ujiannya.
+      </p>
+
+      <div class="panel">
+        <div class="controls">
+          <button class="primary" onclick="sortScores('asc')">
+            ↑ Ascending
+          </button>
+          <button class="secondary" onclick="sortScores('desc')">
+            ↓ Descending
+          </button>
+          <button class="neutral" onclick="resetScores()">
+            ↺ Reset Data
+          </button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama Mahasiswa</th>
+                <th>Nilai Ujian</th>
+              </tr>
+            </thead>
+            <tbody id="studentTable"></tbody>
+          </table>
+        </div>
+
+        <p id="status" aria-live="polite">
+          Data awal ditampilkan. Pilih metode pengurutan.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-label">02 / Algorithm Flow</span>
+      <h2>Alur Logika Program</h2>
+      <p class="description">
+        Langkah-langkah yang dilakukan algoritma Bubble Sort.
+      </p>
+
+      <div class="flow">
+        <div class="step">
+          <b>01 · Mulai</b>
+          <p>Siapkan array berisi nama dan nilai mahasiswa.</p>
+        </div>
+        <div class="step">
+          <b>02 · Bandingkan</b>
+          <p>Bandingkan nilai mahasiswa pada posisi bersebelahan.</p>
+        </div>
+        <div class="step">
+          <b>03 · Tukar Data</b>
+          <p>Jika urutan tidak sesuai, tukarkan posisi kedua data.</p>
+        </div>
+        <div class="step">
+          <b>04 · Ulangi</b>
+          <p>Ulangi perbandingan sampai tidak ada data yang perlu ditukar.</p>
+        </div>
+        <div class="step">
+          <b>05 · Tampilkan</b>
+          <p>Tampilkan data yang sudah terurut sesuai pilihan pengguna.</p>
+        </div>
+        <div class="step">
+          <b>06 · Selesai</b>
+          <p>Pengurutan selesai dan hasil dapat diperiksa pada tabel.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-label">03 / Source Code</span>
+      <h2>Logika Bubble Sort</h2>
+      <p class="description">
+        Berikut inti algoritma yang digunakan dalam program.
+      </p>
+
+      <div class="code">function bubbleSort(data, ascending = true) {
+  const hasil = [...data];
+
+  for (let i = 0; i < hasil.length - 1; i++) {
+    for (let j = 0; j < hasil.length - 1 - i; j++) {
+      const perluTukar = ascending
+        ? hasil[j].nilai > hasil[j + 1].nilai
+        : hasil[j].nilai < hasil[j + 1].nilai;
+
+      if (perluTukar) {
+        const sementara = hasil[j];
+        hasil[j] = hasil[j + 1];
+        hasil[j + 1] = sementara;
+      }
+    }
+  }
+
+  return hasil;
+}</div>
+
+      <div class="note">
+        <strong>Kesimpulan:</strong> Bubble Sort mengurutkan nilai dengan
+        membandingkan elemen yang bersebelahan. Ascending mengurutkan
+        nilai dari kecil ke besar, sedangkan descending dari besar ke kecil.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Maria Kalista Kurnia · NIM 31250007
+    <br>
+    Algoritma & Pemrograman · Minggu 6
+  </footer>
+
+  <script>
+    // Array berisi nama dan nilai mahasiswa (data contoh)
+    const nilaiUAS = [
+      { nama: "Andi", nilai: 89.8 },
+      { nama: "Bunga", nilai: 87.1 },
+      { nama: "kalista", nilai: 92.5 },
+      { nama: "asti", nilai: 78.4 },
+      { nama: "adit", nilai: 85.0 },
+      { nama: "Farel", nilai: 90.2 },
+      { nama: "claudia", nilai: 76.8 },
+      { nama: "yane", nilai: 95.0 },
+      { nama: "nova", nilai: 82.6 },
+      { nama: "caca", nilai: 88.3 }
+    ];
+
+    const table = document.getElementById("studentTable");
+    const status = document.getElementById("status");
+
+    function tampilkanData(data) {
+      table.innerHTML = data.map((mahasiswa, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${mahasiswa.nama}</td>
+          <td class="score">${mahasiswa.nilai.toFixed(1)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function bubbleSort(data, ascending = true) {
+      const hasil = [...data];
+
+      for (let i = 0; i < hasil.length - 1; i++) {
+        let adaPertukaran = false;
+
+        for (let j = 0; j < hasil.length - 1 - i; j++) {
+          const perluTukar = ascending
+            ? hasil[j].nilai > hasil[j + 1].nilai
+            : hasil[j].nilai < hasil[j + 1].nilai;
+
+          if (perluTukar) {
+            const sementara = hasil[j];
+            hasil[j] = hasil[j + 1];
+            hasil[j + 1] = sementara;
+            adaPertukaran = true;
+          }
+        }
+
+        if (!adaPertukaran) break;
+      }
+
+      return hasil;
+    }
+
+    function sortScores(arah) {
+      const ascending = arah === "asc";
+      const hasil = bubbleSort(nilaiUAS, ascending);
+
+      tampilkanData(hasil);
+
+      status.textContent = ascending
+        ? "Berhasil diurutkan secara ascending: nilai terkecil ke terbesar."
+        : "Berhasil diurutkan secara descending: nilai terbesar ke terkecil.";
+    }
+
+    function resetScores() {
+      tampilkanData(nilaiUAS);
+      status.textContent =
+        "Data awal ditampilkan kembali. Pilih metode pengurutan.";
+    }
+
+    document.getElementById("total").textContent = nilaiUAS.length;
+    tampilkanData(nilaiUAS);
+  </script>
+</body>
+</html>
